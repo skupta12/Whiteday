@@ -2,3 +2,8 @@ export { ProductCard } from "./product-card";
 export { ProductCardItem } from "./product-card-item";
 export { Label } from "./label";
 export { Price } from "./price";
+export { Gallery } from "./gallery";
+export { ProductProvider } from "./product-context";
+export { ProductDescription } from "./product-description";
+export { Prose } from "./prose";
+export { VariantSelector } from "./variant-selector";

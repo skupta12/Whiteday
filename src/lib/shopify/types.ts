@@ -97,6 +97,13 @@ export type ShopifyProductsOperation = {
   };
 };
 
+export type ShopifyProductOperation = {
+  data: { product: ShopifyProduct };
+  variables: {
+    handle: string;
+  };
+};
+
 // collection types
 
 export type ShopifyCollection = {

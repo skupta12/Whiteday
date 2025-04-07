@@ -1,5 +1,3 @@
-
-
 interface PriceProps {
   className?: string;
   amount: string;

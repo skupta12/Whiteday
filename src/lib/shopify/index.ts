@@ -7,7 +7,7 @@ import { isShopifyError } from "../type-guards";
 import { ensureStartsWith } from "../utils";
 import { getCollectionProductsQuery, getCollectionsQuery } from "./queries/collection";
 import { getMenuQuery } from "./queries/menu";
-import { getProductsQuery } from "./queries/product";
+import { getProductQuery, getProductsQuery } from "./queries/product";
 import {
   Connection,
   Menu,
@@ -20,6 +20,7 @@ import {
   ShopifyCollectionsOperation,
   ShopifyCollection,
   ShopifyCollectionProductsOperation,
+  ShopifyProductOperation,
 } from "./types";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
@@ -260,4 +261,17 @@ export async function getCollectionProducts({
   return reshapeProducts(
     removeEdgesAndNodes(res.body.data.collection.products)
   );
+}
+
+export async function getProduct(handle: string): Promise<Product | undefined> {
+
+  const res = await shopifyFetch<ShopifyProductOperation>({
+    query: getProductQuery,
+    tags: [TAGS.products],
+    variables: {
+      handle
+    }
+  });
+
+  return reshapeProduct(res.body.data.product, false);
 }

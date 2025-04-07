@@ -3,9 +3,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import { ProductCardItem } from "./product-card-item";
-import {
-  InfinitiveScrollerGroup,
-} from "../ui/infinitive-scroller";
+import { InfinitiveScrollerGroup } from "../ui/infinitive-scroller";
 
 interface ProductCardProps {
   className?: string;
@@ -21,7 +19,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {products.map((product) => (
         <div
           key={product.handle}
-           className="lg:col-span-6 col-span-12 border relative overflow-hidden group" // animate-fade-in
+          className="lg:col-span-6 col-span-12 border relative overflow-hidden group" // animate-fade-in
         >
           <Link prefetch href={`/product/${product.handle}`}>
             <ProductCardItem
