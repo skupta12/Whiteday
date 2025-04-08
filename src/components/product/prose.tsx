@@ -1,12 +1,9 @@
-import { cn } from '@/lib/utils';
+import styles from '@/styles';
 
-export const Prose = ({ html, className }: { html: string; className?: string }) => {
+export const Prose = ({ html }: { html: string; className?: string }) => {
   return (
     <div
-      className={cn(
-        'mx-auto max-w-6xl text-base leading-7 text-black',
-        className
-      )}
+      className={styles.paragraph}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

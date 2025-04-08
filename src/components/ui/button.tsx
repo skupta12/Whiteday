@@ -7,7 +7,7 @@ import React from "react";
 type ButtonProps = {
   children: React.ReactNode;
   className?: string;
-  href: string;
+  href?: string;
   type: "button" | "submit" | undefined;
   variant?: "default" | "revert";
   size?: string;
@@ -27,8 +27,10 @@ type ArrowButtonProps = {
 const buttonVariants = cva(`${styles.button}`, {
   variants: {
     variant: {
-      default: "bg-white text-black hover:bg-black hover:text-white border border-black",
-      revert: "bg-black text-white hover:bg-white hover:text-black border border-black",
+      default:
+        "bg-white text-black hover:bg-black hover:text-white border border-black",
+      revert:
+        "bg-black text-white hover:bg-white hover:text-black border border-black",
     },
   },
 });
@@ -42,8 +44,8 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   onClick,
 }) => {
-  return (
-    <Link className="h-full border border-black bg-white inline-block p-[3px]" href={href}>
+  const buttonContent = (
+    <div className="h-full border border-black bg-white inline-block p-[3px]">
       <button
         onClick={onClick}
         disabled={disabled}
@@ -52,8 +54,20 @@ const Button: React.FC<ButtonProps> = ({
       >
         {children}
       </button>
-    </Link>
+    </div>
   );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+      >
+        {buttonContent}
+      </Link>
+    );
+  }
+
+  return buttonContent;
 };
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({
@@ -61,7 +75,7 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
   type,
   onClick,
   className,
-  disabled
+  disabled,
 }) => {
   return (
     <button
@@ -69,7 +83,9 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       type={type}
-    >{children}</button>
+    >
+      {children}
+    </button>
   );
 };
 

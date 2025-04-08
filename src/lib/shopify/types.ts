@@ -34,6 +34,7 @@ export type ProductVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
+  quantityAvailable: number;
   selectedOptions: {
     name: string;
     value: string;
@@ -61,10 +62,17 @@ export type SEO = {
   description: string;
 };
 
+export type Metafield = {
+  value: string;
+  type: string;
+};
+
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
   availableForSale: boolean;
+  // quantityAvailable: number;
   title: string;
   description: string;
   descriptionHtml: string;
@@ -73,6 +81,7 @@ export type ShopifyProduct = {
     maxVariantPrice: Money;
     minVariantPrice: Money;
   };
+  metafield?: Metafield; 
   variants: Connection<ProductVariant>;
   featuredImage: Image;
   images: Connection<Image>;

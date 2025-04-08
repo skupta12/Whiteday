@@ -24,12 +24,17 @@ const productFragment = /* GraphQL */ `
         currencyCode
       }
     }
+    metafield(namespace: "custom", key: "info") {
+      value
+      type
+    }
     variants(first: 250) {
       edges {
         node {
           id
           title
           availableForSale
+          quantityAvailable
           selectedOptions {
             name
             value
@@ -38,6 +43,7 @@ const productFragment = /* GraphQL */ `
             amount
             currencyCode
           }
+       
         }
       }
     }
@@ -60,4 +66,5 @@ const productFragment = /* GraphQL */ `
   ${imageFragment}
   ${seoFragment}
 `;
+
 export default productFragment;

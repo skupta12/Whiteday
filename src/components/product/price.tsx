@@ -19,7 +19,7 @@ export const Price: React.FC<PriceProps & React.ComponentProps<"p">> = ({
         currencyDisplay: "narrowSymbol",
       }).format(parseFloat(amount.toString()))}
       <span className={currencyCodeClassName}>
-        {currencyCode}
+        {" "}{currencyCode}
       </span>
     </p>
   );
