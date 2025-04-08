@@ -80,8 +80,8 @@ export default async function ProductPage(props: {
       />
       <section className={styles.sectionPadding}>
         <Container size="1400px">
-          <div className="grid grid-cols-12 relative">
-            <div className="col-span-6">
+          <div className="grid grid-cols-12 relative md:gap-13 gap-y-10">
+            <div className="md:col-span-6 col-span-12">
               <Suspense
                 fallback={
                   <div className="relative h-full max-h-[900px] w-full overflow-hidden" />
@@ -96,7 +96,7 @@ export default async function ProductPage(props: {
               </Suspense>
             </div>
 
-            <div className="col-span-6 self-start sticky top-14">
+            <div className="md:col-span-6 col-span-12 self-start sticky top-14">
               <Suspense fallback={null}>
                 <ProductDescription product={product} />
               </Suspense>

@@ -23,12 +23,8 @@ const NavItem: React.FC<{
   </li>
 );
 
-
-
 export const Header: React.FC<HeaderProps> = ({ className }) => {
-
-
-
+  
   const currentPath = usePathname();
 
   return (
@@ -36,15 +32,17 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
       <Container>
         <div className="flex items-center justify-between py-6">
           <Link href="/">
-            <div className="xl:text-[63px] sm:text-[52px] 
-            xs:text-[35px] text-[25px] font-bold text-white uppercase leading-tight">
+            <div
+              className="xl:text-[63px] sm:text-[52px] 
+            xs:text-[35px] text-[25px] font-bold text-white uppercase leading-tight"
+            >
               whiteday
             </div>
           </Link>
           <div className="flex items-center lg:gap-x-10">
             {/* Desktop Navigation */}
             <nav className="lg:block hidden">
-              <ul className="text-sm flex gap-10 md:items-center">
+              <ul className="flex gap-10 md:items-center">
                 {navLinks.map((item) =>
                   item.dropdown ? (
                     <li key={item.id}>

@@ -23,7 +23,7 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="flex items-center text-white 
+        className="text-white flex items-center
     font-medium xl:text-[36px] text-[24px] uppercase outline-none cursor-pointer"
       >
         Pages

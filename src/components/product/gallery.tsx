@@ -11,6 +11,7 @@ export function Gallery({
       {images.map((image) => (
         <div key={image.src}>
           <Image
+            className="w-full h-full"
             src={image.src}
             alt={image.altText}
             width={600}

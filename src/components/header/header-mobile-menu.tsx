@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,16 @@ import {
 import { ChevronDown } from "lucide-react";
 import styles from "@/styles";
 import { navLinks } from "@/constants";
+import { usePathname } from "next/navigation"; // Импорт usePathname
 
 export const HeaderMobileMenu: React.FC = () => {
+  
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -38,14 +45,14 @@ export const HeaderMobileMenu: React.FC = () => {
         >
           <ul className="flex w-full flex-col gap-y-3">
             <li className={styles.mobileNav}>
-              <Link onClick={() => setOpen(!open)} href="/">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className={styles.mobileNav}>
-              <Link onClick={() => setOpen(!open)} href="/search">Shop</Link>
+              <Link href="/search">Shop</Link>
             </li>
             <li>
               <DropdownMenu>
-                <DropdownMenuTrigger
+              <DropdownMenuTrigger
                   className="flex items-center text-white font-medium 
                   xs:text-[30px] text-[24px] uppercase"
                 >
@@ -69,7 +76,7 @@ export const HeaderMobileMenu: React.FC = () => {
               </DropdownMenu>
             </li>
             <li className={styles.mobileNav}>
-              <Link onClick={() => setOpen(!open)} href="/about-us">About us</Link>
+              <Link href="/about-us">About us</Link>
             </li>
           </ul>
         </nav>

@@ -7,7 +7,7 @@ import { Button } from "../ui";
 import { useProduct } from "./product-context";
 
 export const ProductDescription = ({ product }: { product: Product }) => {
-
+  
   const { state } = useProduct();
 
   const variants = product.variants.map((edge) => edge);
@@ -23,49 +23,45 @@ export const ProductDescription = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <div className="flex flex-col border-b pb-6">
+      <div className="flex flex-col border-b mb-5">
         <h1 className={`${styles.headingH1} mb-3 leading-[1]`}>
           {product.title}
         </h1>
-        <div className="mr-auto w-auto text-[30px] text-white mb-4">
+        <div className="mr-auto w-auto text-[30px] text-white">
           <Price
             amount={product.priceRange.maxVariantPrice.amount}
             currencyCode={product.priceRange.maxVariantPrice.currencyCode}
           />
         </div>
+      </div>
+      <VariantSelector options={product.options} variants={product.variants} />
+      <div className="mb-6 flex gap-5 items-center">
+        <Button variant="default" type="button">
+          Add to cart
+        </Button>
+
+        {quantity > 0 && quantity <= 6 && (
+          <p className="text-sm text-white">
+            This item only has{" "}
+            <span className="text-red-400">{quantity} left</span> in stock!
+          </p>
+        )}
+      </div>
+      <div className="border border-white p-4 mb-6">
+        <h4 className={styles.headingH4}>Info</h4>
+
         {product.descriptionHtml ? (
           <Prose html={product.descriptionHtml} />
         ) : null}
       </div>
-      <VariantSelector options={product.options} variants={product.variants} />
-        <div className="my-8">
-        <Button variant="default" type="button">Add to cart</Button>
-        </div>
 
-        <div className="h-8">
-        {quantity > 0 && quantity <= 6 && (
-          <p className=" text-md text-red-500">
-            This item only has {quantity} left in stock!
-          </p>
-        )}
-        </div>
-     
-
-      <div className="border border-white p-5 mb-8">
-        <h4 className={styles.headingH4}>Info</h4>
-        <p className={`${styles.paragraph} leading-[1.8]`}>
-          {product.metafield?.value}
-        </p>
-      </div>
-   
-      {/* <div className="border border-white p-5">
+      <div className="border border-white p-5">
         <h4 className={styles.headingH4}>Size Guide</h4>
         <p className={`${styles.paragraph} leading-[1.8]`}>
-          Unexpected designs <br/> Made for everyone
+          Unexpected designs <br /> Made for everyone <br /> Great quality
         </p>
-      </div> */}
+      </div>
       {/* <AddToCart product={product} /> */}
-      
     </>
   );
 };
