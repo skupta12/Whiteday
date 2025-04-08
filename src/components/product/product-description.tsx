@@ -42,11 +42,14 @@ export const ProductDescription = ({ product }: { product: Product }) => {
         <Button variant="default" type="button">Add to cart</Button>
         </div>
 
-        {quantity > 0 && quantity <= 10 && (
-          <p className="mb-2 text-md text-red-500">
+        <div className="h-8">
+        {quantity > 0 && quantity <= 6 && (
+          <p className=" text-md text-red-500">
             This item only has {quantity} left in stock!
           </p>
         )}
+        </div>
+     
 
       <div className="border border-white p-5 mb-8">
         <h4 className={styles.headingH4}>Info</h4>
