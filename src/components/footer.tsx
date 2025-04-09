@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "@/styles";
 import { Container } from "./container";
 import Link from "next/link";
