@@ -56,7 +56,7 @@ export const CartModal: React.FC = () => {
           <SheetTrigger asChild>
             <div
               className="text-white mr-10 cursor-pointer font-medium 
-              xl:text-[36px] xs:text-[30px] text-[24px] uppercase flex relative"
+              xl:text-[36px] sm:text-[30px] text-[20px] uppercase flex relative"
             >
               Cart
             </div>
@@ -101,8 +101,7 @@ export const CartModal: React.FC = () => {
                     const merchandiseUrl = createUrl(
                       `/product/${item.merchandise.product.handle}`,
                       new URLSearchParams(merchandiseSearchParams)
-                    );
-
+                    );            
                     return (
                       <li
                         key={i}

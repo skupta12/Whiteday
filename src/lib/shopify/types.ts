@@ -164,6 +164,7 @@ export type CartItem = {
   merchandise: {
     id: string;
     title: string;
+    quantityAvailable: number;
     selectedOptions: {
       name: string;
       value: string;

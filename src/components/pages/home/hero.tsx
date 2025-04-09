@@ -10,7 +10,7 @@ export const Hero: React.FC = () => {
   return (
     <section className="hero-section lg:pb-20 md:pb-14 pb-10">
       <Container>
-        <div className="text-center sm:block hidden">
+        <div>
           <h1 className={styles.homeHeading}>White day</h1>
         </div>
 

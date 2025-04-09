@@ -7,7 +7,7 @@ const styles = {
 
     button: "font-inter inline-flex items-center justify-center gap-0 whitespace-nowrap font-normal py-[10px] px-[30px] text-[18px] uppercase cursor-pointer duration-500 disabled:pointer-events-none disabled:opacity-50",
     
-    homeHeading: "text-white 3xl:text-[326px] text-[17vw] leading-[1.3em] whitespace-nowrap uppercase font-semibold",
+    homeHeading: "text-white 3xl:text-[326px] text-[16vw] text-center leading-[1.5em] whitespace-nowrap uppercase font-semibold",
     headingH1: "text-white font-bold lg:text-[80px] sm:text-[60px] text-[36px] uppercase",
     headingH2: "text-white font-bold lg:text-[64px] text-[34px] uppercase leading-[1.3]",
     headingH3: "text-white font-bold lg:text-[40px] text-[30px] uppercase",

@@ -15,7 +15,7 @@ export const ShopAll: React.FC = () => {
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isHovered) return; // Если курсор не в секции, не обновляем offset
+      if (!isHovered) return;
       const { clientX } = event;
       const centerX = window.innerWidth / 2;
       setOffset((clientX - centerX) * 0.05);
@@ -23,7 +23,7 @@ export const ShopAll: React.FC = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [isHovered]); // Следим за isHovered
+  }, [isHovered]);
 
   return (
     <section
@@ -37,10 +37,9 @@ export const ShopAll: React.FC = () => {
             <h1 className={styles.homeHeading}>shop all</h1>
           </div>
 
-          {/* Первая картинка */}
           <motion.div
             className="absolute top-10 2xl:left-110 left-50 -z-1 transform rotate-12 lg:block hidden"
-            animate={{ x: isHovered ? -offset : 0 }} // Возвращаем в начальное положение, если курсор ушел
+            animate={{ x: isHovered ? -offset : 0 }}
             transition={{ type: "tween", stiffness: 100 }}
           >
             <Image
@@ -50,10 +49,9 @@ export const ShopAll: React.FC = () => {
             />
           </motion.div>
 
-          {/* Вторая картинка */}
           <motion.div
             className="absolute top-5 right-50 -z-1 transform rotate-15 lg:block hidden"
-            animate={{ x: isHovered ? offset : 0 }} // Возвращаем в начальное положение, если курсор ушел
+            animate={{ x: isHovered ? offset : 0 }}
             transition={{ type: "tween", stiffness: 100 }}
           >
             <Image

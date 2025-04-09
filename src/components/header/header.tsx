@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
   return (
     <header className={cn("bg-black", className)}>
       <Container>
-        <div className="flex items-center justify-between py-6">
+        <div className="flex items-center justify-between sm:py-6 py-4">
           <Link href="/">
             <div
               className="xl:text-[63px] sm:text-[52px] 

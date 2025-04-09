@@ -10,9 +10,9 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className={styles.sectionPadding}>
+    <section className={`${styles.sectionPadding}`}>
       <Container size="1800px">
-        <div className={`text-center mb-13 ${styles.headingH1}`}>Shop</div>
+        <div className={`text-center mb-5 ${styles.headingH1}`}>Shop</div>
         <div className="flex lg:flex-row flex-col gap-9">
           <div className="xl:min-w-[430px] lg:min-w-[350px]">
             <Collections/>
