@@ -41,7 +41,7 @@ export const HeaderMobileMenu: React.FC = () => {
         <nav
           className={`absolute bg-black border min-w-[192px]
     right-0 z-11 p-4 top-0 justify-start
-    ${!open ? "transform -translate-y-[100%]" : "transform translate-y-[35%]"}`}
+    ${!open ? "transform -translate-y-[100%] opacity-0" : "transform translate-y-[35%] opacity-[100%"}`}
         >
           <ul className="flex w-full flex-col gap-y-3">
             <li className={styles.mobileNav}>
