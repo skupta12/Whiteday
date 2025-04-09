@@ -2,7 +2,7 @@
 
 import { Product, ProductVariant } from "@/lib/shopify/types";
 import { useProduct } from "../product/product-context";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { useCart } from "./cart-context";
 import { addItem } from "./actions";
 import { Button } from "../ui";
