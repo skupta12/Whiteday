@@ -12,7 +12,6 @@ interface AddToCartProps {
 }
 
 export const AddToCart = ({ product }: AddToCartProps) => {
-
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
   const { state } = useProduct();
@@ -33,32 +32,32 @@ export const AddToCart = ({ product }: AddToCartProps) => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleLoading = () => { // temp
+  const handleLoading = () => {
+    // temp
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500)
-  }
+    }, 500);
+  };
 
   return (
     <form
       action={async () => {
         addCartItem(finalVariant, product);
-        await actionWithVariant();
+        actionWithVariant(); // await
       }}
     >
       <Button
         type="submit"
-        variant="default"
-        onClick={handleLoading}
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
-      >
-         {loading ? "Adding to cart..." : "Add to Cart"}
-      </Button>
+        onClick={handleLoading}
+        variant="default">
       <p className="sr-only" role="status" aria-label="polite">
         {message}
       </p>
+     {loading ? "Adding to cart..." : "Add to cart"}
+      </Button>
     </form>
   );
 };
