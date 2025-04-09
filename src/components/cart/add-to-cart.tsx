@@ -12,6 +12,7 @@ interface AddToCartProps {
 }
 
 export const AddToCart = ({ product }: AddToCartProps) => {
+  
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
   const { state } = useProduct();

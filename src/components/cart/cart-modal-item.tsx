@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CartItem } from "@/lib/shopify/types";
-import { EditItemQuantityButton } from "./edit-item-quantity";
 import { Price } from "../product";
+import { EditItemQuantityButton } from ".";
 
 interface CartModalItemProps {
   className?: string;
@@ -51,13 +51,13 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
           href={merchandiseUrl}
           className="z-30 ml-2 flex space-x-4"
         >
-          <div className="flex flex-1 flex-col text-[18px] font-inter gap-y-1">
+          <div className="flex flex-1 flex-col text-[18px] gap-y-1">
 
-            <span className="leading-tight">{productTitle}</span>
+            <span className="leading-tight font-semibold text-[19px] font-inter">{productTitle}</span>
             
-            <Price className="text-base" amount={totalAmount} currencyCode={currencyCode} />
+            <Price className="text-base text-neutral-700" amount={totalAmount} currencyCode={currencyCode} />
             {merchandiseTitle !== defaultOption ? (
-              <p className="text-base">Size: {merchandiseTitle}</p>
+              <p className="text-base text-neutral-700">Size: {merchandiseTitle}</p>
             ) : null}
           </div>
         </Link>

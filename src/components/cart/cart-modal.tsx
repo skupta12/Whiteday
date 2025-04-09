@@ -9,26 +9,21 @@ import {
 } from "../ui/sheet";
 import { useEffect, useRef, useState } from "react";
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
-import { CalculatedCheckout } from "./calculated-checkout";
 import { useFormStatus } from "react-dom";
-import { useCart } from "./cart-context";
-import { CartNumber } from "./cart-number";
 import { createUrl } from "@/lib/utils";
-import { CartModalItem } from "./cart-modal-item";
 import { DEFAULT_OPTION } from "@/lib/constants";
 import { LoadingDots } from "../loading-dots";
+import { useCart } from "./cart-context";
+import { CalculatedCheckout, CartModalItem, CartNumber } from ".";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
 export const CartModal: React.FC = () => {
-  
   const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
-  const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
 
   useEffect(() => {
     if (!cart) {
@@ -37,21 +32,23 @@ export const CartModal: React.FC = () => {
   }, [cart]);
 
   useEffect(() => {
-    if (
-      cart?.totalQuantity &&
-      cart?.totalQuantity !== quantityRef.current &&
-      cart?.totalQuantity > 0
-    ) {
-      if (!isOpen) {
+    if (cart) {
+      const prevQuantity = quantityRef.current ?? 0;
+      const currentQuantity = cart.totalQuantity ?? 0;
+
+      const quantityIncreased = currentQuantity > prevQuantity;
+
+      if (quantityIncreased && !isOpen) {
         setIsOpen(true);
       }
-      quantityRef.current = cart?.totalQuantity;
+
+      quantityRef.current = currentQuantity;
     }
-  }, [isOpen, cart?.totalQuantity, quantityRef]);
+  }, [cart?.totalQuantity, isOpen]);
 
   return (
     <>
-      <Sheet open={isOpen} onOpenChange={isOpen ? closeCart : openCart}>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <div className="relative">
           <SheetTrigger asChild>
             <div
@@ -101,7 +98,7 @@ export const CartModal: React.FC = () => {
                     const merchandiseUrl = createUrl(
                       `/product/${item.merchandise.product.handle}`,
                       new URLSearchParams(merchandiseSearchParams)
-                    );            
+                    );
                     return (
                       <li
                         key={i}
@@ -117,9 +114,7 @@ export const CartModal: React.FC = () => {
                           productImageUrl={
                             item.merchandise.product.featuredImage.url
                           }
-                          productTitle={
-                            item.merchandise.product.title
-                          }
+                          productTitle={item.merchandise.product.title}
                           merchandiseUrl={merchandiseUrl}
                           merchandiseTitle={item.merchandise.title}
                           totalAmount={item.cost.totalAmount.amount}
@@ -135,10 +130,14 @@ export const CartModal: React.FC = () => {
                 totalTaxAmount={cart.cost.totalTaxAmount.amount}
                 totalAmountCurrencyCode={cart.cost.totalAmount.currencyCode}
                 totalAmount={cart.cost.totalAmount.amount}
-                totalTaxAmountCurrencyCode={cart.cost.totalTaxAmount.currencyCode}
+                totalTaxAmountCurrencyCode={
+                  cart.cost.totalTaxAmount.currencyCode
+                }
               />
 
-              <form className="p-4" action={redirectToCheckout}> {/* <form onSubmit={async (e) => { e.preventDefault(); await redirectToCheckout(); }}> */}
+              <form className="p-4" action={redirectToCheckout}>
+                {" "}
+                {/* <form onSubmit={async (e) => { e.preventDefault(); await redirectToCheckout(); }}> */}
                 <CheckoutButton />
               </form>
             </div>
