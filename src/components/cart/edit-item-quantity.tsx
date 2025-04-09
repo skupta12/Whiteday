@@ -24,7 +24,7 @@ function SubmitButton({
         "ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200",
         {
           "ml-auto": type === "minus",
-          "opacity-50": disabled,
+          "opacity-40": disabled,
         }
       )}
     >

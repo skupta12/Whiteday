@@ -17,7 +17,7 @@ export function WelcomeToast() {
         },
         description: (
           <>
-            This is a high-performance, SSR storefront powered by Shopify, Next.js, and Vercel. 🚀
+            This is a high-performance, SSR storefront powered by Shopify, Next.JS, and Vercel. 🚀
             <br />
             <span
               className="font-semibold text-black"

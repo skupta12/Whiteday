@@ -49,7 +49,6 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
         </div>
         <Link
           href={merchandiseUrl}
-          // onClick={closeCart}
           className="z-30 ml-2 flex space-x-4"
         >
           <div className="flex flex-1 flex-col text-[18px] font-inter gap-y-1">
@@ -57,7 +56,6 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
             <span className="leading-tight">{productTitle}</span>
             
             <Price className="text-base" amount={totalAmount} currencyCode={currencyCode} />
-
             {merchandiseTitle !== defaultOption ? (
               <p className="text-base">Size: {merchandiseTitle}</p>
             ) : null}

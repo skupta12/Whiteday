@@ -243,7 +243,7 @@ export async function getCollections(): Promise<Collection[]> {
 }
 
 
-export async function getCollectionProducts({
+export async function getCollectionProducts({ // certain collection
   collection,
   reverse,
   sortKey,
@@ -272,7 +272,7 @@ export async function getCollectionProducts({
   );
 }
 
-export async function getProduct(handle: string): Promise<Product | undefined> {
+export async function getProduct(handle: string): Promise<Product | undefined> { // [handle]/page.tsx
 
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
