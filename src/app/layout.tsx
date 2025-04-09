@@ -2,10 +2,11 @@ import "./globals.css";
 import { baseUrl } from "@/lib/utils";
 import { nippo } from "./fonts";
 import { Header } from "@/components/header";
-import { Footer } from "@/components";
+import { Footer, WelcomeToast } from "@/components";
 import { cookies } from "next/headers";
 import { getCart } from "@/lib/shopify";
 import { CartProvider } from "@/components/cart";
+import { Toaster } from "sonner";
 
 const { SITE_NAME } = process.env;
 
@@ -34,7 +35,11 @@ export default async function RootLayout({
       <body className={`${nippo.className} antialiased bg-black`}>
         <CartProvider cartPromise={cart}>
           <Header />
-          <main>{children}</main>
+          <main>
+            {children}
+            <Toaster closeButton />
+            <WelcomeToast />
+          </main>
           <Footer />
         </CartProvider>
       </body>
