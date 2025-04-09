@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { useEffect, useRef, useState } from "react";
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useFormStatus } from "react-dom";

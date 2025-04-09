@@ -47,17 +47,21 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
             src={productImageUrl}
           />
         </div>
-        <Link
-          href={merchandiseUrl}
-          className="z-30 ml-2 flex space-x-4"
-        >
+        <Link href={merchandiseUrl} className="z-30 ml-2 flex space-x-4">
           <div className="flex flex-1 flex-col text-[18px] gap-y-1">
+            <span className="leading-tight font-semibold text-[19px] font-inter">
+              {productTitle}
+            </span>
 
-            <span className="leading-tight font-semibold text-[19px] font-inter">{productTitle}</span>
-            
-            <Price className="text-base text-neutral-700" amount={totalAmount} currencyCode={currencyCode} />
+            <Price
+              className="text-base text-neutral-700"
+              amount={totalAmount}
+              currencyCode={currencyCode}
+            />
             {merchandiseTitle !== defaultOption ? (
-              <p className="text-base text-neutral-700">Size: {merchandiseTitle}</p>
+              <p className="text-base text-neutral-700">
+                Size: {merchandiseTitle}
+              </p>
             ) : null}
           </div>
         </Link>

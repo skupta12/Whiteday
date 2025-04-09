@@ -31,16 +31,6 @@ export const AddToCart = ({ product }: AddToCartProps) => {
     (variant) => variant.id === selectedVariantId
   )!;
 
-  const [loading, setLoading] = useState(false);
-
-  const handleLoading = () => {
-    // temp
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  };
-
   return (
     <form
       action={async () => {
@@ -52,12 +42,11 @@ export const AddToCart = ({ product }: AddToCartProps) => {
         type="submit"
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
-        onClick={handleLoading}
         variant="default">
       <p className="sr-only" role="status" aria-label="polite">
         {message}
       </p>
-     {loading ? "Adding to cart..." : "Add to cart"}
+      Add to cart
       </Button>
     </form>
   );
