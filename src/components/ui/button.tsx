@@ -39,59 +39,59 @@ const buttonVariants = cva(`${styles.button}`, {
 
 const wrapperClasses = "h-full border border-black bg-white inline-block p-[3px]";
 
-const renderButton = (
-  children: React.ReactNode,
-  className?: string,
-  type: "button" | "submit" = "button",
-  onClick?: () => void,
-  disabled?: boolean
-) => (
-  <div className={wrapperClasses}>
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(buttonVariants({ variant: "default" }), className)}
-    >
-      {children}
-    </button>
-  </div>
-);
-
 const Button: React.FC<ButtonProps> = ({
   children,
   className,
   href,
-  type = "button",
-  variant = "default",
-  disabled = false,
+  type,
+  variant,
+  disabled,
   onClick,
-  availableForSale = true,
+  availableForSale,
   selectedVariantId,
 }) => {
-  const commonClass = cn(buttonVariants({ variant }), className);
+  const buttonContent = (
+    <div className={wrapperClasses}>
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+        className={cn(buttonVariants({ variant }), className)}
+      >
+        {children}
+      </button>
+    </div>
+  );
 
-  // Out of stock
-  if (!availableForSale) {
-    return renderButton("Out of Stock", commonClass, type, onClick, true);
-  }
-
-  // No variant selected
-  if (!selectedVariantId) {
-    return renderButton("Add to Cart", commonClass, type, onClick, true);
-  }
-
-  // With link
   if (href) {
+    return <Link href={href}>{buttonContent}</Link>;
+  }
+
+  if (!availableForSale) {
     return (
-      <Link href={href}>
-        {renderButton(children, commonClass, type, onClick, disabled)}
-      </Link>
+      <div className={wrapperClasses}>
+        <button disabled className={cn(buttonVariants({ variant }), className)}>
+          Out of Stock
+        </button>
+      </div>
     );
   }
 
-  // Default button
-  return renderButton(children, commonClass, type, onClick, disabled);
+  if (!selectedVariantId) {
+    return (
+      <div className={wrapperClasses}>
+        <button
+          aria-label="Please select an option"
+          disabled
+          className={cn(buttonVariants({ variant }), className)}
+        >
+          Add to Cart
+        </button>
+      </div>
+    );
+  }
+
+  return buttonContent;
 };
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({
