@@ -3,8 +3,8 @@
 import { Product } from "@/lib/shopify/types";
 import { Price, Prose, VariantSelector } from ".";
 import styles from "@/styles";
-import { Button } from "../ui";
 import { useProduct } from "./product-context";
+import { AddToCart } from "../cart";
 
 export const ProductDescription = ({ product }: { product: Product }) => {
   
@@ -36,9 +36,7 @@ export const ProductDescription = ({ product }: { product: Product }) => {
       </div>
       <VariantSelector options={product.options} variants={product.variants} />
       <div className="mb-6 flex gap-5 items-center">
-        <Button variant="default" type="button">
-          Add to cart
-        </Button>
+        <AddToCart product={product}/>
 
         {quantity > 0 && quantity <= 6 && (
           <p className="text-sm text-white">

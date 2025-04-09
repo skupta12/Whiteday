@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
           <Link href="/">
             <div
               className="xl:text-[63px] sm:text-[52px] 
-            xs:text-[35px] text-[25px] font-bold text-white uppercase leading-tight"
+            text-[29px] font-bold text-white uppercase leading-tight"
             >
               whiteday
             </div>

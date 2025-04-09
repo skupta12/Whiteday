@@ -8,17 +8,19 @@ type ButtonProps = {
   children: React.ReactNode;
   className?: string;
   href?: string;
-  type: "button" | "submit" | undefined;
+  type: "button" | "submit";
   variant?: "default" | "revert";
   size?: string;
   disabled?: boolean;
   onClick?: () => void;
+  availableForSale?: boolean;
+  selectedVariantId?: string;
 };
 
 type ArrowButtonProps = {
-  className: string;
+  className?: string;
   children?: React.ReactNode;
-  type?: "button" | "submit" | undefined;
+  type?: "button" | "submit";
   size?: string;
   disabled?: boolean;
   onClick?: () => void;
@@ -35,17 +37,55 @@ const buttonVariants = cva(`${styles.button}`, {
   },
 });
 
+const wrapperStyle = (bg: string = "white") =>
+  `h-full border border-black bg-${bg} inline-block p-[3px]`;
+
 const Button: React.FC<ButtonProps> = ({
   children,
   className,
   href,
-  type,
-  variant,
-  disabled,
+  type = "button",
+  variant = "default",
+  disabled = false,
   onClick,
+  availableForSale,
+  selectedVariantId,
 }) => {
-  const buttonContent = (
-    <div className="h-full border border-black bg-white inline-block p-[3px]">
+  const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
+
+// переносим проверку наличия и варианта вниз — только если нет href
+if (!href && !availableForSale) {
+  return (
+    <div className={wrapperStyle("neutral-400")}>
+      <button
+        aria-label="Out of stock"
+        disabled
+        className={cn(buttonVariants({ variant }), disabledClasses)}
+      >
+        Out of Stock
+      </button>
+    </div>
+  );
+}
+
+if (!href && !selectedVariantId) {
+  return (
+    <div className={wrapperStyle("neutral-400")}>
+      <button
+        aria-label="Please select an option"
+        disabled
+        className={cn(buttonVariants({ variant }), disabledClasses)}
+      >
+        Add to Cart
+      </button>
+    </div>
+  );
+}
+
+
+  // Default button
+  return (
+    <div className={wrapperStyle()}>
       <button
         onClick={onClick}
         disabled={disabled}
@@ -56,30 +96,18 @@ const Button: React.FC<ButtonProps> = ({
       </button>
     </div>
   );
-
-  if (href) {
-    return (
-      <Link
-        href={href}
-      >
-        {buttonContent}
-      </Link>
-    );
-  }
-
-  return buttonContent;
 };
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({
   children,
-  type,
+  type = "button",
   onClick,
   className,
-  disabled,
+  disabled = false,
 }) => {
   return (
     <button
-      className={className}
+      className={cn(className)}
       onClick={onClick}
       disabled={disabled}
       type={type}

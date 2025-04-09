@@ -78,7 +78,7 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      <section className={styles.sectionPadding}>
+      <section className={`${styles.sectionPadding} pt-0`}>
         <Container size="1400px">
           <div className="grid grid-cols-12 relative md:gap-13 gap-y-10">
             <div className="md:col-span-6 col-span-12">
