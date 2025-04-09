@@ -112,7 +112,7 @@ function createOrUpdateCartItem(
       id: variant.id,
       title: variant.title,
       selectedOptions: variant.selectedOptions,
-      quantityAvailable: 5,
+      quantityAvailable: 10,
       product: {
         id: product.id,
         handle: product.handle,

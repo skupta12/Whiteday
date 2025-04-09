@@ -243,7 +243,7 @@ export async function getCollections(): Promise<Collection[]> {
 }
 
 
-export async function getCollectionProducts({ // certain collection
+export async function getCollectionProducts({ // fetching certain collection
   collection,
   reverse,
   sortKey,
