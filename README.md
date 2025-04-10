@@ -21,9 +21,6 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** a
 - **Server-Side Rendering (SSR)**:  
   Built with Next.js, the project supports SSR, which helps with faster page loads, better SEO, and a better user experience. All product data is fetched server-side for fast and efficient rendering.
   
-- **Customizable Design**:  
-  The template is designed to be easily customized to fit your brand, whether you're tweaking the color scheme, layout, or typography.
-
 - **Fast Performance**:  
   Optimized for speed, ensuring your site loads quickly and provides a smooth shopping experience. Next.js's automatic code-splitting and optimization features are leveraged for maximum performance.
 
