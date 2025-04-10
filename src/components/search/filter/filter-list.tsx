@@ -19,7 +19,7 @@ export const FilterList = ({ list }: { list: ListItem[];}) => {
   return (
     <>
       <nav className='sticky top-15'>
-        <ul className='lg:block flex flex-wrap justify-center gap-3'>
+        <ul className='lg:block flex flex-wrap justify-center gap-4'>
           <Suspense fallback={null}>
             <FilterItemList list={list} />
           </Suspense>

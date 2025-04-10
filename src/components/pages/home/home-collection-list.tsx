@@ -11,7 +11,7 @@ export const HomeCollectionList: React.FC<HomeCollectionListProps> = ({ // TODO:
 }) => {
   return (
     <nav className={cn("mb-6 sticky md:top-[85%] left-0 z-1", className)}>
-      <ul className="flex justify-center items-center gap-7 flex-wrap">
+      <ul className="flex justify-center items-center gap-4 flex-wrap">
         {collections.map(({ title, path, id }) => (
           <li
             className="text-black bg-[#FAF9F380] backdrop-blur-2xl text-[24px] 

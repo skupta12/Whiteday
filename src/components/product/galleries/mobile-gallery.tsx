@@ -39,8 +39,10 @@ export function MobileGallery({
 
         {images.length > 1 ? (
           <div className="absolute bottom-[15%] flex w-full justify-center">
-            <div className="mx-auto flex h-11 items-center rounded-full border
-             border-white bg-neutral-50/80 text-neutral-500 backdrop-blur-sm">
+            <div
+              className="mx-auto flex h-11 items-center rounded-full border
+             border-white bg-neutral-50/80 text-neutral-500 backdrop-blur-sm"
+            >
               <button
                 formAction={() => {
                   const newState = updateImage(previousImageIndex.toString());
@@ -78,7 +80,7 @@ export function MobileGallery({
                     updateURL(newState);
                   }}
                   aria-label="Select product image"
-                  className="h-full w-full cursor-pointer"
+                  className="h-full w-full"
                 >
                   <ProductCardItem
                     alt={image.altText}
