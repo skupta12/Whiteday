@@ -73,7 +73,7 @@ export function MobileGallery({
         <ul className="flex items-center gap-3 mt-5">
           {images.map((image, index) => {
             return (
-              <li key={image.src} className="h-35 w-35">
+              <li key={image.src} className="aspect-square">
                 <button
                   formAction={() => {
                     const newState = updateImage(index.toString());
