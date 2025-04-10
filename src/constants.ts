@@ -70,6 +70,11 @@ export const collections = [
     title: "Tops",
     path: "/search/tops",
   },
+  {
+    id: 6,
+    title: "Dresses",
+    path: "/search/dresses",
+  },
 ];
 
 export const insta = [

@@ -24,7 +24,7 @@ export const Label: React.FC<LabelProps> = ({
           {title}
         </h3>
         <Price
-          className="font-inter text-[13px]"
+          className="text-base"
           amount={amount}
           currencyCode={currencyCode}
           currencyCodeClassName="hidden"

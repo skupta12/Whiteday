@@ -37,7 +37,8 @@ const buttonVariants = cva(`${styles.button}`, {
   },
 });
 
-const wrapperClasses = "h-full border border-black bg-white inline-block p-[3px]";
+const wrapperClasses =
+  "h-full border border-black bg-white inline-block p-[3px]";
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -70,7 +71,11 @@ const Button: React.FC<ButtonProps> = ({
   if (!availableForSale) {
     return (
       <div className={wrapperClasses}>
-        <button disabled className={cn(buttonVariants({ variant }), className)}>
+        <button
+          aria-label="Out of stock"
+          disabled
+          className={cn(buttonVariants({ variant }), className)}
+        >
           Out of Stock
         </button>
       </div>
