@@ -16,7 +16,7 @@ export const nippo = localFont({
       },
     ],
     variable: '--font-nippo',
-    // fallback: ["sans serif"],
+    fallback: ["sans serif"],
     adjustFontFallback: false
   });
   

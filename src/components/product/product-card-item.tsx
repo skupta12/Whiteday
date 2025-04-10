@@ -5,7 +5,6 @@ export function ProductCardItem({
   label,
   ...props
 }: {
-  active?: boolean;
   label?: {
     title: string;
     amount: string;

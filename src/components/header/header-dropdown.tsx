@@ -1,5 +1,3 @@
-"use client";
-
 import { DropdownMenu } from "../ui";
 import {
   DropdownMenuContent,

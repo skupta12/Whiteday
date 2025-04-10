@@ -1,6 +1,5 @@
 import { Price } from "../product";
 
-
 interface CalculatedCheckoutProps {
   totalAmount: string;
   totalAmountCurrencyCode: string;

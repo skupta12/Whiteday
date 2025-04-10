@@ -1,5 +1,8 @@
 import { Container } from "@/components";
-import { Gallery, ProductDescription, ProductProvider } from "@/components/product";
+import {
+  ProductDescription,
+  ProductProvider,
+} from "@/components/product";
 import { HIDDEN_PRODUCT_TAG } from "@/lib/constants";
 import { getProduct } from "@/lib/shopify";
 import styles from "@/styles";
@@ -7,6 +10,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Image } from "@/lib/shopify/types";
+import { MobileGallery, DesktopGallery } from "@/components/product/galleries";
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -82,18 +86,22 @@ export default async function ProductPage(props: {
         <Container size="1400px">
           <div className="grid grid-cols-12 relative md:gap-13 gap-y-10">
             <div className="md:col-span-6 col-span-12">
-              <Suspense
-                fallback={
-                  <div className="relative h-full max-h-[900px] w-full overflow-hidden" />
-                }
-              >
-                <Gallery
+              <div className="md:block hidden">
+                <DesktopGallery
                   images={product.images.slice(0, 3).map((image: Image) => ({
                     src: image.url,
                     altText: image.altText,
                   }))}
                 />
-              </Suspense>
+              </div>
+              <div className="md:hidden block">
+                <MobileGallery
+                  images={product.images.slice(0, 3).map((image: Image) => ({
+                    src: image.url,
+                    altText: image.altText,
+                  }))}
+                />
+              </div>
             </div>
 
             <div className="md:col-span-6 col-span-12 self-start sticky top-14">

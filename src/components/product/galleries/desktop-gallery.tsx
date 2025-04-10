@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function Gallery({
+export function DesktopGallery({
   images,
 }: {
   images: { src: string; altText: string }[];

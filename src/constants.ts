@@ -147,27 +147,27 @@ export const footerLinks = [
       {
         id: 2,
         title: "Style guide",
-        path: "/style-guide"
+        path: "/"
       },
       {
         id: 3,
         title: "Instructions",
-        path: "/instructions"
+        path: "/"
       },
       {
         id: 4,
         title: "Error 404",
-        path: "/error-404"
+        path: "/"
       },
       {
         id: 5,
         title: "FAQS",
-        path: "/faq"
+        path: "/"
       },
       {
         id: 6,
         title: "Contact us",
-        path: "/contact-us"
+        path: "/"
       }
     ]
   }

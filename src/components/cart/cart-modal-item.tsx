@@ -60,7 +60,7 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
             />
             {merchandiseTitle !== defaultOption ? (
               <p className="text-base text-neutral-700">
-                Size: {merchandiseTitle}
+                {merchandiseTitle}
               </p>
             ) : null}
           </div>
