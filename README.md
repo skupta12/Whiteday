@@ -35,6 +35,10 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** a
 
 ---
 
+## 🎨 Design
+
+The design of the **WhiteDay** ecommerce template was created by [Webestica](https://webestica.com/), providing a modern, clean, and user-friendly interface tailored for an optimal shopping experience.
+
 ### 💡 Technologies Used:
 - **Next.js** for server-side rendering and routing
 - **React** for building the user interface
