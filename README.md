@@ -38,8 +38,10 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** a
 ### 💡 Technologies Used:
 - **Next.js** for server-side rendering and routing
 - **React** for building the user interface
+- **TypeScript** for static typing and enhancing code quality
 - **Shopify** API for fetching product data
 - **Tailwind CSS** for responsive design and styling
+
 
 
 
