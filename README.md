@@ -1,4 +1,4 @@
-![React](https://img.shields.io/badge/react-v19.0.0-blue) ![Next.js](https://img.shields.io/badge/next-v15.2.0-yellowgreen) ![Shopify](https://img.shields.io/badge/shopify-v2.0-green)
+![React](https://img.shields.io/badge/react-v19.0.0-blue) ![Next.js](https://img.shields.io/badge/next-v15.3-yellowgreen) ![Shopify](https://img.shields.io/badge/shopify-v2.0-green)
 
 # 🛍️ WhiteDay Ecommerce Template
 
