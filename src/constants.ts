@@ -111,12 +111,12 @@ export const footerLinks = [
       {
         id: 2,
         title: "Shop",
-        path: "/shop"
+        path: "/search"
       },
       {
         id: 3,
         title: "About us",
-        path: "/shop"
+        path: "/about-us"
       },
       {
         id: 4,
