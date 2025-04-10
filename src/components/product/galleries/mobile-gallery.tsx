@@ -27,7 +27,7 @@ export function MobileGallery({
       <div className="relative overflow-hidden">
         {images[imageIndex] && (
           <Image
-             className="w-full aspect-[2/3] object-cover"
+            className="w-full aspect-[2/3] object-cover"
             width={600}
             height={900}
             sizes="(min-width: 1024px) 66vw, 100vw"
