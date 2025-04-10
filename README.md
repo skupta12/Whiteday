@@ -6,11 +6,11 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** a
 
 ## 🚀 Key Features
 
-- **Dynamic Routing**:  
-  Effortlessly create dynamic routes with Next.js, ensuring smooth navigation and a seamless user experience. Whether you're displaying products, categories, or custom pages, the routing is automatically handled.
-
 - **Shopify Integration**:  
   Seamlessly fetch product categories and product data directly from Shopify using their API. This makes it easy to set up and manage your ecommerce store while connecting to the most popular platform for online retail.
+
+ **Incremental Static Regeneration (ISR)**:  
+  Next.js's ISR feature allows you to create static pages at runtime, updating content in the background without needing to rebuild the entire site. This ensures fast loading times and up-to-date content for your users, while maintaining a smooth user experience.
 
 - **Fully Functional Cart**:  
   Users can easily add, remove, or update product quantities in the shopping cart. The cart persists across pages and updates in real time, allowing for a smooth and interactive shopping experience.
