@@ -1,3 +1,5 @@
+![React](https://img.shields.io/badge/react-v18-blue) ![Next.js](https://img.shields.io/badge/next-v14.2.3-yellowgreen) ![Shopify](https://img.shields.io/badge/shopify-v2.0-green)
+
 # 🛍️ WhiteDay Ecommerce Template
 
 Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** and **React**. This project provides a powerful and flexible foundation for building an online store with advanced features and integrations.
