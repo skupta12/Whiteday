@@ -32,6 +32,7 @@ export const CartModalItem: React.FC<CartModalItemProps> = ({
   quantity,
   defaultOption,
 }) => {
+  
   return (
     <div className="flex flex-row justify-between items-center py-4 px-4 relative">
       {/* <div className="absolute z-40 top-0 left-1">
