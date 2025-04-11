@@ -15,7 +15,7 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **React** and
   Next.js's ISR feature allows you to create static pages at runtime, updating content in the background without needing to rebuild the entire site.
 
 - **Fully Functional Cart**:  
-  Users can easily add, remove, or update product quantities in the shopping cart. The cart persists across pages and updates in real time, allowing for a smooth and interactive shopping experience.
+  Users can easily add, remove, or update product quantities in the shopping cart.
 
 - **Responsive Design**:  
   The template is fully responsive, optimized for all screen sizes from mobile to desktop, ensuring a great shopping experience on any device.
@@ -24,7 +24,7 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **React** and
   Built with Next.js, the project supports SSR, which helps with faster page loads, better SEO, and a better user experience. All product data is fetched server-side for fast and efficient rendering.
   
 - **Fast Performance**:  
-  Optimized for speed, ensuring your site loads quickly and provides a smooth shopping experience. Next.js's automatic code-splitting and optimization features are leveraged for maximum performance.
+  Optimized for speed, ensuring your site loads quickly and provides a smooth shopping experience.
 
 - **Product Pages with Details**:  
   Product pages show all necessary details like price, description, images, and reviews, with an easy-to-use layout for customers to explore.
