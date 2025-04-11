@@ -14,6 +14,7 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
+
 export const CartModal: React.FC = () => {
   const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
