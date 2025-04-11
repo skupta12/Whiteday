@@ -2,7 +2,7 @@
 
 # 🛍️ WhiteDay Ecommerce Template
 
-Welcome to **WhiteDay** — a modern ecommerce template built with **Next.js** and **React**. This project provides a powerful and flexible foundation for building an online store with advanced features and integrations.
+Welcome to **WhiteDay** — a modern ecommerce template built with **React** and **Next.js**. This project provides a powerful and flexible foundation for building an online store with advanced features and integrations.
 
 <a href="https://white-day-ecommerce.vercel.app/">![0909](https://github.com/user-attachments/assets/eedc7e68-e5bd-4f03-92fd-ae941b548380)</a>
 
