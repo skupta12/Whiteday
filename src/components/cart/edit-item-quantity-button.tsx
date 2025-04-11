@@ -4,7 +4,7 @@ import { CartItem } from "@/lib/shopify/types";
 import { updateItemQuantity } from "./actions";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useActionState } from "react";
+import { useActionState, useTransition } from "react";
 
 function SubmitButton({
   type,
@@ -47,6 +47,7 @@ export const EditItemQuantityButton = ({
   optimisticUpdate: any;
 }) => {
   const [message, formAction] = useActionState(updateItemQuantity, null);
+  const [isPending, startTransition] = useTransition();
 
   const isPlus = type === "plus";
   const maxReached =
@@ -61,14 +62,16 @@ export const EditItemQuantityButton = ({
 
   return (
     <form
-      action={async () => {
+      action={() => {
         if (!maxReached) {
-          optimisticUpdate(payload.merchandiseId, type);
-          await actionWithVariant();
+          startTransition(() => {
+            optimisticUpdate(payload.merchandiseId, type);
+            actionWithVariant();
+          });
         }
       }}
     >
-      <SubmitButton type={type} disabled={maxReached} />
+      <SubmitButton type={type} disabled={maxReached || isPending} />
       <p aria-label="polite" className="sr-only" role="status">
         {message}
       </p>
