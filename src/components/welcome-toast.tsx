@@ -9,7 +9,7 @@ export function WelcomeToast() {
     if (window.innerHeight < 650) return;
 
     if (!document.cookie.includes("welcome-toast=2")) {
-      toast("Welcome to Ecommerce Template🎉", {
+      toast("Welcome to my E-commerce Template🎉", {
         id: "welcome-toast",
         duration: Infinity,
         onDismiss: () => {
