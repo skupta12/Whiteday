@@ -4,7 +4,7 @@ import { CartItem } from "@/lib/shopify/types";
 import { updateItemQuantity } from "./actions";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { startTransition, useActionState, useTransition } from "react";
+import { useActionState, useTransition } from "react";
 
 function SubmitButton({
   type,
