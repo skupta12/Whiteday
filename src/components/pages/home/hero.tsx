@@ -16,7 +16,7 @@ export const Hero: React.FC = () => {
 
         <div className="grid grid-cols-12 md:gap-12 gap-y-10">
           <div className="md:col-span-6 col-span-12 relative overflow-hidden group duration-200">
-            <Link href="/search/men">
+             <Link href="/search/men">
               <Image
                 priority
                 className="w-full h-full"
