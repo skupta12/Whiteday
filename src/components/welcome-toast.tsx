@@ -9,7 +9,7 @@ export function WelcomeToast() {
     if (window.innerHeight < 650) return;
 
     if (!document.cookie.includes("welcome-toast=2")) {
-      toast("Welcome to my Commerce Template🎉", {
+      toast("Welcome to my React & Next.JS Commerce🎉", {
         id: "welcome-toast",
         duration: Infinity,
         onDismiss: () => {

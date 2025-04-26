@@ -27,7 +27,11 @@ export const Insta: React.FC<InstaProps> = ({ className }) => {
                     White day is everyday <br />
                   </h3>
 
-                  <Link target="_blank" className={styles.headingH3} href="https://www.instagram.com">
+                  <Link
+                    target="_blank"
+                    className={styles.headingH3}
+                    href="https://www.instagram.com"
+                  >
                     <span className="font-normal font-inter underline">
                       @insta
                     </span>
@@ -39,10 +43,11 @@ export const Insta: React.FC<InstaProps> = ({ className }) => {
             if (item.id === 10) return null;
 
             return (
-              <div key={item.id} className="col-span-2">
+              <div key={item.id} className="overflow-hidden col-span-2">
                 {item.href ? (
                   <Image
-                    className="w-full"
+                    className="w-full transform scale-[100%] 
+                    hover:scale-[1.10] duration-500"
                     src={item.href}
                     alt="Insta image"
                     width={312}
