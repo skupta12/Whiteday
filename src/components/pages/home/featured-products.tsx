@@ -15,7 +15,7 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = async ({
   className,
 }) => {
   const products = await getCollectionProducts({
-    collection: "hidden-featured",
+    collection: "women",
   });
 
   return (
