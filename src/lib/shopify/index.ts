@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+
 import {
   HIDDEN_PRODUCT_TAG,
   SHOPIFY_GRAPHQL_API_ENDPOINT,
@@ -31,9 +31,10 @@ import {
   ShopifyUpdateCartOperation,
   ShopifyAddToCartOperation,
   ShopifyCreateCartOperation,
+  Menu,
+  ShopifyMenuOperation,
 } from "./types";
-import { headers } from "next/headers";
-import { revalidateTag } from "next/cache";
+import { getMenuQuery } from "./queries/menu";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
@@ -98,23 +99,23 @@ export async function shopifyFetch<T>({
   }
 }
 
-// export async function getMenu(handle: string): Promise<Menu[]> {
-//   const res = await shopifyFetch<ShopifyMenuOperation>({
-//     query: getMenuQuery,
-//     variables: {
-//       handle,
-//     },
-//   });
-//   return (
-//     res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
-//       title: item.title,
-//       path: item.url
-//         .replace(domain, "")
-//         .replace("/collections", "/search")
-//         .replace("/pages", ""),
-//     })) || []
-//   );
-// }
+export async function getMenu(handle: string): Promise<Menu[]> {
+  const res = await shopifyFetch<ShopifyMenuOperation>({
+    query: getMenuQuery,
+    variables: {
+      handle,
+    },
+  });
+  return (
+    res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+      title: item.title,
+      path: item.url
+        .replace(domain, "")
+        .replace("/collections", "/search")
+        .replace("/pages", ""),
+    })) || []
+  );
+}
 
 function removeEdgesAndNodes<T>(array: Connection<T>): T[] {
   return array.edges.map((edge) => edge?.node);
@@ -381,40 +382,40 @@ export async function addToCart(
 }
 
 
-export async function revalidate(req: NextRequest): Promise<NextResponse> {
+// export async function revalidate(req: NextRequest): Promise<NextResponse> {
   
-  const collectionWebhooks = [
-    'collections/create',
-    'collections/delete',
-    'collections/update'
-  ];
-  const productWebhooks = [
-    'products/create',
-    'products/delete',
-    'products/update'
-  ];
-  const topic = (await (headers())).get('x-shopify-topic') || 'unknown';
-  const secret = req.nextUrl.searchParams.get('secret');
-  const isCollectionUpdate = collectionWebhooks.includes(topic);
-  const isProductUpdate = productWebhooks.includes(topic);
+//   const collectionWebhooks = [
+//     'collections/create',
+//     'collections/delete',
+//     'collections/update'
+//   ];
+//   const productWebhooks = [
+//     'products/create',
+//     'products/delete',
+//     'products/update'
+//   ];
+//   const topic = (await (headers())).get('x-shopify-topic') || 'unknown';
+//   const secret = req.nextUrl.searchParams.get('secret');
+//   const isCollectionUpdate = collectionWebhooks.includes(topic);
+//   const isProductUpdate = productWebhooks.includes(topic);
 
-  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-    console.error('Invalid revalidation secret.');
-    return NextResponse.json({ status: 401 });
-  }
+//   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+//     console.error('Invalid revalidation secret.');
+//     return NextResponse.json({ status: 401 });
+//   }
 
-  if (!isCollectionUpdate && !isProductUpdate) {
-    // We don't need to revalidate anything for any other topics.
-    return NextResponse.json({ status: 200 });
-  }
+//   if (!isCollectionUpdate && !isProductUpdate) {
+//     // We don't need to revalidate anything for any other topics.
+//     return NextResponse.json({ status: 200 });
+//   }
 
-  if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections);
-  }
+//   if (isCollectionUpdate) {
+//     revalidateTag(TAGS.collections);
+//   }
 
-  if (isProductUpdate) {
-    revalidateTag(TAGS.products);
-  }
+//   if (isProductUpdate) {
+//     revalidateTag(TAGS.products);
+//   }
 
-  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
-}
+//   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+// }

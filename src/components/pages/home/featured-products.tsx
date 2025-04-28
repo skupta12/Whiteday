@@ -27,7 +27,8 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = async ({
           {products.map((product) => (
             <div
               key={product.handle}
-              className="lg:col-span-4 col-span-12 border animate-fade-in relative overflow-hidden group"
+              className="lg:col-span-4 col-span-12 border animate-fade-in 
+              relative overflow-hidden group"
             >
               <Link prefetch href={`/product/${product.handle}`}>
                 <ProductCardItem
@@ -44,7 +45,8 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = async ({
                   className="w-full aspect-[2/3] object-cover"
                 />
               </Link>
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="opacity-0 group-hover:opacity-100 
+              transition-opacity duration-300">
                 <InfinitiveScrollerGroup
                   title="Buy now"
                   length={15}

@@ -12,7 +12,7 @@ export const Care: React.FC<CareProps> = ({ className }) => {
   return (
     <section className={cn(styles.sectionPadding, className)}>
       <Container>
-        <div className="grid grid-cols-12 gap-4 relative">
+        <div className="grid grid-cols-12 gap-6 relative">
           <div className="col-span-6">
             <Image
               width={900}
@@ -21,7 +21,7 @@ export const Care: React.FC<CareProps> = ({ className }) => {
               alt="The clothes image"
             />
           </div>
-          <div className="col-span-6 place-content-end">
+          <div className="col-span-6 mt-auto">
             <h2 className="text-[96px] font-medium text-white uppercase absolute top-0 left-1/3">
             Care and love for the environment</h2>
             <ul className="text-white list-disc list-inside text-[28px] leading-[2] font-inter">
