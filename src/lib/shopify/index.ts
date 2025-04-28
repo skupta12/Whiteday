@@ -35,6 +35,9 @@ import {
   ShopifyMenuOperation,
 } from "./types";
 import { getMenuQuery } from "./queries/menu";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { revalidateTag } from "next/cache";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
@@ -382,40 +385,40 @@ export async function addToCart(
 }
 
 
-// export async function revalidate(req: NextRequest): Promise<NextResponse> {
+export async function revalidate(req: NextRequest): Promise<NextResponse> {
   
-//   const collectionWebhooks = [
-//     'collections/create',
-//     'collections/delete',
-//     'collections/update'
-//   ];
-//   const productWebhooks = [
-//     'products/create',
-//     'products/delete',
-//     'products/update'
-//   ];
-//   const topic = (await (headers())).get('x-shopify-topic') || 'unknown';
-//   const secret = req.nextUrl.searchParams.get('secret');
-//   const isCollectionUpdate = collectionWebhooks.includes(topic);
-//   const isProductUpdate = productWebhooks.includes(topic);
+  const collectionWebhooks = [
+    'collections/create',
+    'collections/delete',
+    'collections/update'
+  ];
+  const productWebhooks = [
+    'products/create',
+    'products/delete',
+    'products/update'
+  ];
+  const topic = (await (headers())).get('x-shopify-topic') || 'unknown';
+  const secret = req.nextUrl.searchParams.get('secret');
+  const isCollectionUpdate = collectionWebhooks.includes(topic);
+  const isProductUpdate = productWebhooks.includes(topic);
 
-//   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-//     console.error('Invalid revalidation secret.');
-//     return NextResponse.json({ status: 401 });
-//   }
+  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+    console.error('Invalid revalidation secret.');
+    return NextResponse.json({ status: 401 });
+  }
 
-//   if (!isCollectionUpdate && !isProductUpdate) {
-//     // We don't need to revalidate anything for any other topics.
-//     return NextResponse.json({ status: 200 });
-//   }
+  if (!isCollectionUpdate && !isProductUpdate) {
+    // We don't need to revalidate anything for any other topics.
+    return NextResponse.json({ status: 200 });
+  }
 
-//   if (isCollectionUpdate) {
-//     revalidateTag(TAGS.collections);
-//   }
+  if (isCollectionUpdate) {
+    revalidateTag(TAGS.collections);
+  }
 
-//   if (isProductUpdate) {
-//     revalidateTag(TAGS.products);
-//   }
+  if (isProductUpdate) {
+    revalidateTag(TAGS.products);
+  }
 
-//   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
-// }
+  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
