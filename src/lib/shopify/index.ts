@@ -396,25 +396,27 @@ export async function addToCart(
 
 
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
-  
+  // We always need to respond with a 200 status code to Shopify,
+  // otherwise it will continue to retry the request.
+
   const collectionWebhooks = [
-    'collections/create',
-    'collections/delete',
-    'collections/update'
+    "collections/create",
+    "collections/delete",
+    "collections/update",
   ];
   const productWebhooks = [
-    'products/create',
-    'products/delete',
-    'products/update'
+    "products/create",
+    "products/delete",
+    "products/update",
   ];
-  const topic = (await (headers())).get('x-shopify-topic') || 'unknown';
-  const secret = req.nextUrl.searchParams.get('secret');
+  const topic = (await headers()).get("x-shopify-topic") || "unknown";
+  const secret = req.nextUrl.searchParams.get("secret");
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-    console.error('Invalid revalidation secret.');
-    return NextResponse.json({ status: 401 });
+    console.error("Invalid revalidation secret.");
+    return NextResponse.json({ status: 200 });
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
