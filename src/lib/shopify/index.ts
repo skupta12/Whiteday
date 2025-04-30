@@ -5,9 +5,17 @@ import {
 } from "../constants";
 import { isShopifyError } from "../type-guards";
 import { ensureStartsWith } from "../utils";
-import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFromCartMutation } from "./mutations/cart";
+import {
+  addToCartMutation,
+  createCartMutation,
+  editCartItemsMutation,
+  removeFromCartMutation,
+} from "./mutations/cart";
 import { getCartQuery } from "./queries/cart";
-import { getCollectionProductsQuery, getCollectionsQuery } from "./queries/collection";
+import {
+  getCollectionProductsQuery,
+  getCollectionsQuery,
+} from "./queries/collection";
 // import { getMenuQuery } from "./queries/menu";
 import { getProductQuery, getProductsQuery } from "./queries/product";
 import {
@@ -34,9 +42,9 @@ import {
   ShopifyMenuOperation,
 } from "./types";
 import { getMenuQuery } from "./queries/menu";
-// import { NextRequest, NextResponse } from "next/server";
-// import { headers } from "next/headers";
-// import { revalidateTag } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { revalidateTag } from "next/cache";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
@@ -187,8 +195,6 @@ export async function getProducts({
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
-
-
 // collections
 
 const reshapeCollection = (
@@ -248,7 +254,6 @@ export async function getCollections(): Promise<Collection[]> {
   return collections;
 }
 
-
 export async function getCollectionProducts({
   collection,
   reverse,
@@ -283,20 +288,23 @@ export async function getCollectionProducts({
       removeEdgesAndNodes(res.body.data.collection.products)
     );
   } catch (error: any) {
-    console.error(`Error fetching products for collection "${collection}":`, error?.message || error);
+    console.error(
+      `Error fetching products for collection "${collection}":`,
+      error?.message || error
+    );
     return [];
   }
 }
 
-
-export async function getProduct(handle: string): Promise<Product | undefined> { // [handle]/page.tsx
+export async function getProduct(handle: string): Promise<Product | undefined> {
+  // [handle]/page.tsx
 
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
     tags: [TAGS.products],
     variables: {
-      handle
-    }
+      handle,
+    },
   });
 
   return reshapeProduct(res.body.data.product, false);
@@ -394,43 +402,39 @@ export async function addToCart(
   return reshapeCart(res.body.data.cartLinesAdd.cart);
 }
 
+export async function revalidate(req: NextRequest): Promise<NextResponse> {
+  const collectionWebhooks = [
+    "collections/create",
+    "collections/delete",
+    "collections/update",
+  ];
+  const productWebhooks = [
+    "products/create",
+    "products/delete",
+    "products/update",
+  ];
+  const topic = (await headers()).get("x-shopify-topic") || "unknown";
+  const secret = req.nextUrl.searchParams.get("secret");
+  const isCollectionUpdate = collectionWebhooks.includes(topic);
+  const isProductUpdate = productWebhooks.includes(topic);
 
-// export async function revalidate(req: NextRequest): Promise<NextResponse> {
-//   // We always need to respond with a 200 status code to Shopify,
-//   // otherwise it will continue to retry the request.
+  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+    console.error("Invalid revalidation secret.");
+    return NextResponse.json({ status: 401 });
+  }
 
-//   const collectionWebhooks = [
-//     "collections/create",
-//     "collections/delete",
-//     "collections/update",
-//   ];
-//   const productWebhooks = [
-//     "products/create",
-//     "products/delete",
-//     "products/update",
-//   ];
-//   const topic = (await headers()).get("x-shopify-topic") || "unknown";
-//   const secret = req.nextUrl.searchParams.get("secret");
-//   const isCollectionUpdate = collectionWebhooks.includes(topic);
-//   const isProductUpdate = productWebhooks.includes(topic);
+  if (!isCollectionUpdate && !isProductUpdate) {
+    // We don't need to revalidate anything for any other topics.
+    return NextResponse.json({ status: 200 });
+  }
 
-//   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-//     console.error("Invalid revalidation secret.");
-//     return NextResponse.json({ status: 200 });
-//   }
+  if (isCollectionUpdate) {
+    revalidateTag(TAGS.collections);
+  }
 
-//   if (!isCollectionUpdate && !isProductUpdate) {
-//     // We don't need to revalidate anything for any other topics.
-//     return NextResponse.json({ status: 200 });
-//   }
+  if (isProductUpdate) {
+    revalidateTag(TAGS.products);
+  }
 
-//   if (isCollectionUpdate) {
-//     revalidateTag(TAGS.collections);
-//   }
-
-//   if (isProductUpdate) {
-//     revalidateTag(TAGS.products);
-//   }
-
-//   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
-// }
+  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
