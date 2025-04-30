@@ -1,3 +1,4 @@
+"use server";
 
 import {
   HIDDEN_PRODUCT_TAG,
