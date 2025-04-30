@@ -24,11 +24,7 @@ const productFragment = /* GraphQL */ `
         currencyCode
       }
     }
-    metafield(namespace: "custom", key: "info") {
-      value
-      type
-    }
-    variants(first: 50) {
+    variants(first: 250) {
       edges {
         node {
           id

@@ -62,10 +62,10 @@ export type SEO = {
   description: string;
 };
 
-export type Metafield = {
-  value: string;
-  type: string;
-};
+// export type Metafield = {
+//   value: string;
+//   type: string;
+// };
 
 
 export type ShopifyProduct = {
@@ -81,7 +81,7 @@ export type ShopifyProduct = {
     maxVariantPrice: Money;
     minVariantPrice: Money;
   };
-  metafield?: Metafield; 
+  // metafield?: Metafield; 
   variants: Connection<ProductVariant>;
   featuredImage: Image;
   images: Connection<Image>;
