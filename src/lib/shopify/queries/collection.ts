@@ -5,7 +5,7 @@ import productFragment from "../fragments/product";
 
 export const getCollectionsQuery = /* GraphQL */ `
   query getCollections {
-    collections(first: 100, sortKey: TITLE) {
+    collections(first: 20, sortKey: TITLE) {
       edges {
         node {
           ...collection
@@ -23,7 +23,7 @@ export const getCollectionProductsQuery = /* GraphQL */ `
     $reverse: Boolean
   ) {
     collection(handle: $handle) {
-      products(sortKey: $sortKey, reverse: $reverse, first: 100) {
+      products(sortKey: $sortKey, reverse: $reverse, first: 20) {
         edges {
           node {
             ...product
