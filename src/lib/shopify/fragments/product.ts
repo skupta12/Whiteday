@@ -28,7 +28,7 @@ const productFragment = /* GraphQL */ `
       value
       type
     }
-    variants(first: 250) {
+    variants(first: 50) {
       edges {
         node {
           id
