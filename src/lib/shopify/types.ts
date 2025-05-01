@@ -72,7 +72,6 @@ export type ShopifyProduct = {
   id: string;
   handle: string;
   availableForSale: boolean;
-  // quantityAvailable: number;
   title: string;
   description: string;
   descriptionHtml: string;
@@ -81,7 +80,6 @@ export type ShopifyProduct = {
     maxVariantPrice: Money;
     minVariantPrice: Money;
   };
-  // metafield?: Metafield; 
   variants: Connection<ProductVariant>;
   featuredImage: Image;
   images: Connection<Image>;

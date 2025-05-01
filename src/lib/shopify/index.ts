@@ -16,13 +16,10 @@ import {
   getCollectionProductsQuery,
   getCollectionsQuery,
 } from "./queries/collection";
-// import { getMenuQuery } from "./queries/menu";
 import { getProductQuery, getProductsQuery } from "./queries/product";
 import {
   Connection,
-  // Menu,
   Product,
-  // ShopifyMenuOperation,
   ShopifyProduct,
   ShopifyProductsOperation,
   Image,
@@ -182,9 +179,6 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-
- console.log('Query being sent to Shopify:', query, reverse, sortKey);
-
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
     tags: [TAGS.products],
@@ -194,7 +188,6 @@ export async function getProducts({
       sortKey,
     },
   });
- 
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
@@ -267,42 +260,29 @@ export async function getCollectionProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  try {
-    console.log('Query being sent to Shopify:', collection, reverse, sortKey);
-    const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
-      query: getCollectionProductsQuery,
-      tags: [TAGS.collections, TAGS.products],
-      variables: {
-        handle: collection,
-        reverse,
-        sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
-      },
-    });
+  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+    query: getCollectionProductsQuery,
+    tags: [TAGS.collections, TAGS.products],
+    variables: {
+      handle: collection,
+      reverse,
+      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+    },
+  });
 
-    if (!res?.body?.data?.collection) {
-      console.warn(`No collection found for handle: "${collection}"`);
-      return [];
-    }
-
-    if (!res.body.data.collection.products) {
-      console.warn(`No products found for collection: "${collection}"`);
-      return [];
-    }
-
-    return reshapeProducts(
-      removeEdgesAndNodes(res.body.data.collection.products)
-    );
-  } catch (error: any) {
-    console.error(
-      `Error fetching products for collection "${collection}":`,
-      error?.message || error
-    );
+  if (!res.body.data.collection) {
+    console.log(`No collection found for \`${collection}\``);
     return [];
   }
+
+  return reshapeProducts(
+    removeEdgesAndNodes(res.body.data.collection.products)
+  );
 }
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
   // [handle]/page.tsx
+
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
     tags: [TAGS.products],
