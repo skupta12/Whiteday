@@ -35,10 +35,7 @@ import {
   ShopifyUpdateCartOperation,
   ShopifyAddToCartOperation,
   ShopifyCreateCartOperation,
-  Menu,
-  ShopifyMenuOperation,
 } from "./types";
-import { getMenuQuery } from "./queries/menu";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { revalidateTag } from "next/cache";
@@ -106,23 +103,23 @@ export async function shopifyFetch<T>({
   }
 }
 
-export async function getMenu(handle: string): Promise<Menu[]> {
-  const res = await shopifyFetch<ShopifyMenuOperation>({
-    query: getMenuQuery,
-    variables: {
-      handle,
-    },
-  });
-  return (
-    res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
-      title: item.title,
-      path: item.url
-        .replace(domain, "")
-        .replace("/collections", "/search")
-        .replace("/pages", ""),
-    })) || []
-  );
-}
+// export async function getMenu(handle: string): Promise<Menu[]> {
+//   const res = await shopifyFetch<ShopifyMenuOperation>({
+//     query: getMenuQuery,
+//     variables: {
+//       handle,
+//     },
+//   });
+//   return (
+//     res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+//       title: item.title,
+//       path: item.url
+//         .replace(domain, "")
+//         .replace("/collections", "/search")
+//         .replace("/pages", ""),
+//     })) || []
+//   );
+// }
 
 function removeEdgesAndNodes<T>(array: Connection<T>): T[] {
   return array.edges.map((edge) => edge?.node);
