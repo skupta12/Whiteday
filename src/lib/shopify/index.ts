@@ -182,6 +182,9 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
+
+ console.log('Query being sent to Shopify:', query, reverse, sortKey);
+
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
     tags: [TAGS.products],
@@ -191,6 +194,7 @@ export async function getProducts({
       sortKey,
     },
   });
+ 
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
@@ -264,6 +268,7 @@ export async function getCollectionProducts({
   sortKey?: string;
 }): Promise<Product[]> {
   try {
+    console.log('Query being sent to Shopify:', collection, reverse, sortKey);
     const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
       query: getCollectionProductsQuery,
       tags: [TAGS.collections, TAGS.products],
@@ -298,7 +303,6 @@ export async function getCollectionProducts({
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
   // [handle]/page.tsx
-
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
     tags: [TAGS.products],
