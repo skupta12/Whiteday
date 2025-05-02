@@ -394,28 +394,51 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
     "products/delete",
     "products/update",
   ];
+
   const topic = (await headers()).get("x-shopify-topic") || "unknown";
   const secret = req.nextUrl.searchParams.get("secret");
+
+  console.log("Received webhook topic:", topic);
+  console.log("Received secret:", secret);
+  console.log("Expected secret:", process.env.SHOPIFY_REVALIDATION_SECRET);
+
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
     console.error("Invalid revalidation secret.");
-    return NextResponse.json({ status: 401 });
+    return NextResponse.json({ status: 401, error: "Invalid secret" });
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
-    // We don't need to revalidate anything for any other topics.
-    return NextResponse.json({ status: 200 });
+    console.log("No revalidation needed for topic:", topic);
+    return NextResponse.json({ status: 200, skipped: true, topic });
   }
 
-  if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections);
-  }
+  try {
+    if (isCollectionUpdate) {
+      console.log("Revalidating TAGS.collections...");
+      await revalidateTag(TAGS.collections);
+    }
 
-  if (isProductUpdate) {
-    revalidateTag(TAGS.products);
-  }
+    if (isProductUpdate) {
+      console.log("Revalidating TAGS.products...");
+      await revalidateTag(TAGS.products);
+    }
 
-  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+    console.log("Revalidation complete");
+    return NextResponse.json({
+      status: 200,
+      revalidated: true,
+      topic,
+      now: Date.now(),
+    });
+  } catch (error) {
+    console.error("Revalidation failed:", error);
+    return NextResponse.json({
+      status: 500,
+      error: "Revalidation error",
+      topic,
+    });
+  }
 }
