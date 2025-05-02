@@ -176,17 +176,22 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  const res = await shopifyFetch<ShopifyProductsOperation>({
-    query: getProductsQuery,
-    tags: [TAGS.products],
-    variables: {
-      query,
-      reverse,
-      sortKey,
-    },
-  });
+  try {
+    const res = await shopifyFetch<ShopifyProductsOperation>({
+      query: getProductsQuery,
+      tags: [TAGS.products],
+      variables: {
+        query,
+        reverse,
+        sortKey,
+      },
+    });
 
-  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+  } catch (error) {
+    console.error("getProducts Error:", error);
+    return [];
+  }
 }
 
 // collections
@@ -221,32 +226,43 @@ const reshapeCollections = (collections: ShopifyCollection[]) => {
 };
 
 export async function getCollections(): Promise<Collection[]> {
-  const res = await shopifyFetch<ShopifyCollectionsOperation>({
-    query: getCollectionsQuery,
-    tags: [TAGS.collections],
-  });
-  const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
-  const collections = [
-    {
-      handle: "",
-      title: "All",
-      description: "All products",
-      seo: {
+  try {
+    const res = await shopifyFetch<ShopifyCollectionsOperation>({
+      query: getCollectionsQuery,
+      tags: [TAGS.collections],
+    });
+
+    if (res.status !== 200 || !res.body?.data?.collections) {
+      console.error("Error fetching collections", res);
+      return [];
+    }
+
+    const shopifyCollections = removeEdgesAndNodes(res.body.data.collections);
+
+    const collections = [
+      {
+        handle: "",
         title: "All",
         description: "All products",
+        seo: {
+          title: "All",
+          description: "All products",
+        },
+        path: "/search",
+        updatedAt: new Date().toISOString(),
       },
-      path: "/search",
-      updatedAt: new Date().toISOString(),
-    },
-    // Filter out the `hidden` collections.
-    // Collections that start with `hidden-*` need to be hidden on the search page.
-    ...reshapeCollections(shopifyCollections).filter(
-      (collection) => !collection.handle.startsWith("hidden")
-    ),
-  ];
+      ...reshapeCollections(shopifyCollections).filter(
+        (collection) => !collection.handle.startsWith("hidden")
+      ),
+    ];
 
-  return collections;
+    return collections;
+  } catch (error) {
+    console.error("getCollections Error:", error);
+    return [];
+  }
 }
+
 
 export async function getCollectionProducts({
   collection,
@@ -257,39 +273,40 @@ export async function getCollectionProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
-    query: getCollectionProductsQuery,
-    tags: [TAGS.collections, TAGS.products],
-    variables: {
-      handle: collection,
-      reverse,
-      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
-    },
-  });
+  try {
+    const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+      query: getCollectionProductsQuery,
+      tags: [TAGS.collections, TAGS.products],
+      variables: {
+        handle: collection,
+        reverse,
+        sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+      },
+    });
 
-  if (!res.body.data.collection) {
-    console.log(`No collection found for \`${collection}\``);
-    return [];
+    return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
+  } catch (error) {
+    console.error("getCollectionProducts Error:", error);
+    return []; // Возвращаем пустой массив в случае ошибки
   }
-
-  return reshapeProducts(
-    removeEdgesAndNodes(res.body.data.collection.products)
-  );
 }
+
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  // [handle]/page.tsx
+  try {
+    const res = await shopifyFetch<ShopifyProductOperation>({
+      query: getProductQuery,
+      tags: [TAGS.products],
+      variables: { handle },
+    });
 
-  const res = await shopifyFetch<ShopifyProductOperation>({
-    query: getProductQuery,
-    tags: [TAGS.products],
-    variables: {
-      handle,
-    },
-  });
-
-  return reshapeProduct(res.body.data.product, false);
+    return reshapeProduct(res.body.data.product, false);
+  } catch (error) {
+    console.error("getProduct Error:", error);
+    return undefined; // Возвращаем undefined в случае ошибки
+  }
 }
+
 
 // cart
 
@@ -383,7 +400,6 @@ export async function addToCart(
   return reshapeCart(res.body.data.cartLinesAdd.cart);
 }
 
-
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const collectionWebhooks = [
     "collections/create",
@@ -409,22 +425,19 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
-    console.log(`ℹ️ Webhook received: ${topic} — no revalidation necessary.`);
     return NextResponse.json({ status: 200, message: "Ignored topic" });
   }
-
-  console.log(`🔄 Webhook received: ${topic}. Starting revalidation...`);
 
   await new Promise((res) => setTimeout(res, 3000));
 
   try {
     if (isCollectionUpdate) {
-      console.log("📦 Revalidating collections...");
+      console.log("Revalidating collections...");
       await revalidateTag(TAGS.collections);
     }
 
     if (isProductUpdate) {
-      console.log("🛍️ Revalidating products...");
+      console.log("Revalidating products...");
       await revalidateTag(TAGS.products);
     }
 
@@ -435,7 +448,7 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
       now: Date.now(),
     });
   } catch (err) {
-    console.error("❗ Revalidation failed:", err);
+    console.error("Revalidation failed:", err);
     return NextResponse.json({ status: 500, error: "Revalidation failed" });
   }
 }
