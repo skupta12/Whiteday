@@ -24,7 +24,7 @@ const productFragment = /* GraphQL */ `
         currencyCode
       }
     }
-    variants(first: 20) {
+    variants(first: 50) {
       edges {
         node {
           id
@@ -39,13 +39,14 @@ const productFragment = /* GraphQL */ `
             amount
             currencyCode
           }
+       
         }
       }
     }
     featuredImage {
       ...image
     }
-    images(first: 10) {
+    images(first: 20) {
       edges {
         node {
           ...image
