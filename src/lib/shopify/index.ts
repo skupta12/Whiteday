@@ -176,22 +176,17 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  try {
-    const res = await shopifyFetch<ShopifyProductsOperation>({
-      query: getProductsQuery,
-      tags: [TAGS.products],
-      variables: {
-        query,
-        reverse,
-        sortKey,
-      },
-    });
+  const res = await shopifyFetch<ShopifyProductsOperation>({
+    query: getProductsQuery,
+    tags: [TAGS.products],
+    variables: {
+      query,
+      reverse,
+      sortKey,
+    },
+  });
 
-    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
-  } catch (error) {
-    console.error("getProducts Error:", error);
-    return [];
-  }
+  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
 // collections
@@ -226,43 +221,32 @@ const reshapeCollections = (collections: ShopifyCollection[]) => {
 };
 
 export async function getCollections(): Promise<Collection[]> {
-  try {
-    const res = await shopifyFetch<ShopifyCollectionsOperation>({
-      query: getCollectionsQuery,
-      tags: [TAGS.collections],
-    });
-
-    if (res.status !== 200 || !res.body?.data?.collections) {
-      console.error("Error fetching collections", res);
-      return [];
-    }
-
-    const shopifyCollections = removeEdgesAndNodes(res.body.data.collections);
-
-    const collections = [
-      {
-        handle: "",
+  const res = await shopifyFetch<ShopifyCollectionsOperation>({
+    query: getCollectionsQuery,
+    tags: [TAGS.collections],
+  });
+  const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
+  const collections = [
+    {
+      handle: "",
+      title: "All",
+      description: "All products",
+      seo: {
         title: "All",
         description: "All products",
-        seo: {
-          title: "All",
-          description: "All products",
-        },
-        path: "/search",
-        updatedAt: new Date().toISOString(),
       },
-      ...reshapeCollections(shopifyCollections).filter(
-        (collection) => !collection.handle.startsWith("hidden")
-      ),
-    ];
+      path: "/search",
+      updatedAt: new Date().toISOString(),
+    },
+    // Filter out the `hidden` collections.
+    // Collections that start with `hidden-*` need to be hidden on the search page.
+    ...reshapeCollections(shopifyCollections).filter(
+      (collection) => !collection.handle.startsWith("hidden")
+    ),
+  ];
 
-    return collections;
-  } catch (error) {
-    console.error("getCollections Error:", error);
-    return [];
-  }
+  return collections;
 }
-
 
 export async function getCollectionProducts({
   collection,
@@ -273,40 +257,39 @@ export async function getCollectionProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  try {
-    const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
-      query: getCollectionProductsQuery,
-      tags: [TAGS.collections, TAGS.products],
-      variables: {
-        handle: collection,
-        reverse,
-        sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
-      },
-    });
+  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+    query: getCollectionProductsQuery,
+    tags: [TAGS.collections, TAGS.products],
+    variables: {
+      handle: collection,
+      reverse,
+      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+    },
+  });
 
-    return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
-  } catch (error) {
-    console.error("getCollectionProducts Error:", error);
-    return []; // Возвращаем пустой массив в случае ошибки
+  if (!res.body.data.collection) {
+    console.log(`No collection found for \`${collection}\``);
+    return [];
   }
-}
 
+  return reshapeProducts(
+    removeEdgesAndNodes(res.body.data.collection.products)
+  );
+}
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  try {
-    const res = await shopifyFetch<ShopifyProductOperation>({
-      query: getProductQuery,
-      tags: [TAGS.products],
-      variables: { handle },
-    });
+  // [handle]/page.tsx
 
-    return reshapeProduct(res.body.data.product, false);
-  } catch (error) {
-    console.error("getProduct Error:", error);
-    return undefined; // Возвращаем undefined в случае ошибки
-  }
+  const res = await shopifyFetch<ShopifyProductOperation>({
+    query: getProductQuery,
+    tags: [TAGS.products],
+    variables: {
+      handle,
+    },
+  });
+
+  return reshapeProduct(res.body.data.product, false);
 }
-
 
 // cart
 
@@ -401,36 +384,38 @@ export async function addToCart(
 }
 
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
-  try {
-    const collectionWebhooks = ["collections/create", "collections/delete", "collections/update"];
-    const productWebhooks = ["products/create", "products/delete", "products/update"];
+  const collectionWebhooks = [
+    "collections/create",
+    "collections/delete",
+    "collections/update",
+  ];
+  const productWebhooks = [
+    "products/create",
+    "products/delete",
+    "products/update",
+  ];
+  const topic = (await headers()).get("x-shopify-topic") || "unknown";
+  const secret = req.nextUrl.searchParams.get("secret");
+  const isCollectionUpdate = collectionWebhooks.includes(topic);
+  const isProductUpdate = productWebhooks.includes(topic);
 
-    const reqHeaders = await headers();
-    const topic = reqHeaders.get("x-shopify-topic") || "unknown";
-    const secret = req.nextUrl.searchParams.get("secret");
-
-    // Проверка секрета
-    if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-      return NextResponse.json({ status: 401, error: "Unauthorized" });
-    }
-
-    if (!collectionWebhooks.includes(topic) && !productWebhooks.includes(topic)) {
-      return NextResponse.json({ status: 200, message: "Ignored topic" });
-    }
-
-    await new Promise((res) => setTimeout(res, 3000));
-
-    if (collectionWebhooks.includes(topic)) {
-      await revalidateTag(TAGS.collections);
-    }
-
-    if (productWebhooks.includes(topic)) {
-      await revalidateTag(TAGS.products);
-    }
-
-    return NextResponse.json({ status: 200, revalidated: true, topic, now: Date.now() });
-  } catch (err) {
-    console.error("Revalidation failed:", err);
-    return NextResponse.json({ status: 500, error: "Revalidation failed" });
+  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+    console.error("Invalid revalidation secret.");
+    return NextResponse.json({ status: 401 });
   }
+
+  if (!isCollectionUpdate && !isProductUpdate) {
+    // We don't need to revalidate anything for any other topics.
+    return NextResponse.json({ status: 200 });
+  }
+
+  if (isCollectionUpdate) {
+    revalidateTag(TAGS.collections);
+  }
+
+  if (isProductUpdate) {
+    revalidateTag(TAGS.products);
+  }
+
+  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }
