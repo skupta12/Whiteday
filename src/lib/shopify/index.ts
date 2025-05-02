@@ -1,5 +1,3 @@
-// shopify.ts
-
 import {
   HIDDEN_PRODUCT_TAG,
   SHOPIFY_GRAPHQL_API_ENDPOINT,
@@ -49,7 +47,9 @@ const domain = process.env.SHOPIFY_STORE_DOMAIN
 const endpoint = `${domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}`;
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
 
-type ExtractVariables<T> = T extends { variables: object } ? T["variables"] : never;
+type ExtractVariables<T> = T extends { variables: object }
+  ? T["variables"]
+  : never;
 
 export async function shopifyFetch<T>({
   cache = "force-cache",
@@ -63,7 +63,7 @@ export async function shopifyFetch<T>({
   query: string;
   tags?: string[];
   variables?: ExtractVariables<T>;
-}): Promise<{ status: number; body: T }> {
+}): Promise<{ status: number; body: T } | never> {
   try {
     const result = await fetch(endpoint, {
       method: "POST",
@@ -72,21 +72,22 @@ export async function shopifyFetch<T>({
         "X-Shopify-Storefront-Access-Token": key,
         ...headers,
       },
-      body: JSON.stringify({ ...(query && { query }), ...(variables && { variables }) }),
+      body: JSON.stringify({
+        ...(query && { query }),
+        ...(variables && { variables }),
+      }),
       cache,
       ...(tags && { next: { tags } }),
     });
-
     const body = await result.json();
-
     if (body.errors) {
-      console.error("Shopify GraphQL Error:", body.errors);
       throw body.errors[0];
     }
-
-    return { status: result.status, body };
+    return {
+      status: result.status,
+      body,
+    };
   } catch (error) {
-    console.error("Shopify fetch failed:", error);
     if (isShopifyError(error)) {
       throw {
         cause: error.cause?.toString() || "unknown",
@@ -95,9 +96,30 @@ export async function shopifyFetch<T>({
         query,
       };
     }
-    throw { error, query };
+    throw {
+      error,
+      query,
+    };
   }
 }
+
+// export async function getMenu(handle: string): Promise<Menu[]> {
+//   const res = await shopifyFetch<ShopifyMenuOperation>({
+//     query: getMenuQuery,
+//     variables: {
+//       handle,
+//     },
+//   });
+//   return (
+//     res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+//       title: item.title,
+//       path: item.url
+//         .replace(domain, "")
+//         .replace("/collections", "/search")
+//         .replace("/pages", ""),
+//     })) || []
+//   );
+// }
 
 function removeEdgesAndNodes<T>(array: Connection<T>): T[] {
   return array.edges.map((edge) => edge?.node);
@@ -114,8 +136,14 @@ function reshapeImages(images: Connection<Image>, productTitle: string) {
   });
 }
 
-function reshapeProduct(product: ShopifyProduct, filterHiddenProducts: boolean = true) {
-  if (!product || (filterHiddenProducts && product.tags.includes(HIDDEN_PRODUCT_TAG))) {
+function reshapeProduct(
+  product: ShopifyProduct,
+  filterHiddenProducts: boolean = true
+) {
+  if (
+    !product ||
+    (filterHiddenProducts && product.tags.includes(HIDDEN_PRODUCT_TAG))
+  ) {
     return undefined;
   }
   const { images, variants, ...rest } = product;
@@ -127,9 +155,16 @@ function reshapeProduct(product: ShopifyProduct, filterHiddenProducts: boolean =
 }
 
 function reshapeProducts(products: ShopifyProduct[]) {
-  return products
-    .map((product) => reshapeProduct(product))
-    .filter((product): product is Product => !!product);
+  const reshapedProducts = [];
+  for (const product of products) {
+    if (product) {
+      const reshapedProduct = reshapeProduct(product);
+      if (reshapedProduct) {
+        reshapedProducts.push(reshapedProduct);
+      }
+    }
+  }
+  return reshapedProducts;
 }
 
 export async function getProducts({
@@ -141,21 +176,28 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  try {
-    const res = await shopifyFetch<ShopifyProductsOperation>({
-      query: getProductsQuery,
-      tags: [TAGS.products],
-      variables: { query, reverse, sortKey },
-    });
-    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
-  } catch (err) {
-    console.error("Failed to fetch products:", err);
-    return [];
-  }
+  const res = await shopifyFetch<ShopifyProductsOperation>({
+    query: getProductsQuery,
+    tags: [TAGS.products],
+    variables: {
+      query,
+      reverse,
+      sortKey,
+    },
+  });
+
+  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
-const reshapeCollection = (collection: ShopifyCollection): Collection | undefined => {
-  if (!collection) return undefined;
+// collections
+
+const reshapeCollection = (
+  collection: ShopifyCollection
+): Collection | undefined => {
+  if (!collection) {
+    return undefined;
+  }
+
   return {
     ...collection,
     path: `/search/${collection.handle}`,
@@ -163,38 +205,47 @@ const reshapeCollection = (collection: ShopifyCollection): Collection | undefine
 };
 
 const reshapeCollections = (collections: ShopifyCollection[]) => {
-  return collections
-    .map((collection) => reshapeCollection(collection))
-    .filter((collection): collection is Collection => !!collection);
+  const reshapedCollections = [];
+
+  for (const collection of collections) {
+    if (collection) {
+      const reshapedCollection = reshapeCollection(collection);
+
+      if (reshapedCollection) {
+        reshapedCollections.push(reshapedCollection);
+      }
+    }
+  }
+
+  return reshapedCollections;
 };
 
 export async function getCollections(): Promise<Collection[]> {
-  try {
-    const res = await shopifyFetch<ShopifyCollectionsOperation>({
-      query: getCollectionsQuery,
-      tags: [TAGS.collections],
-    });
-    const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
-    return [
-      {
-        handle: "",
+  const res = await shopifyFetch<ShopifyCollectionsOperation>({
+    query: getCollectionsQuery,
+    tags: [TAGS.collections],
+  });
+  const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
+  const collections = [
+    {
+      handle: "",
+      title: "All",
+      description: "All products",
+      seo: {
         title: "All",
         description: "All products",
-        seo: {
-          title: "All",
-          description: "All products",
-        },
-        path: "/search",
-        updatedAt: new Date().toISOString(),
       },
-      ...reshapeCollections(shopifyCollections).filter(
-        (collection) => !collection.handle.startsWith("hidden")
-      ),
-    ];
-  } catch (err) {
-    console.error("Failed to fetch collections:", err);
-    return [];
-  }
+      path: "/search",
+      updatedAt: new Date().toISOString(),
+    },
+    // Filter out the `hidden` collections.
+    // Collections that start with `hidden-*` need to be hidden on the search page.
+    ...reshapeCollections(shopifyCollections).filter(
+      (collection) => !collection.handle.startsWith("hidden")
+    ),
+  ];
+
+  return collections;
 }
 
 export async function getCollectionProducts({
@@ -206,45 +257,50 @@ export async function getCollectionProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  try {
-    const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
-      query: getCollectionProductsQuery,
-      tags: [TAGS.collections, TAGS.products],
-      variables: {
-        handle: collection,
-        reverse,
-        sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
-      },
-    });
-    if (!res.body.data.collection) {
-      console.warn(`No collection found for \`${collection}\``);
-      return [];
-    }
-    return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
-  } catch (err) {
-    console.error("Failed to fetch collection products:", err);
+  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+    query: getCollectionProductsQuery,
+    tags: [TAGS.collections, TAGS.products],
+    variables: {
+      handle: collection,
+      reverse,
+      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+    },
+  });
+
+  if (!res.body.data.collection) {
+    console.log(`No collection found for \`${collection}\``);
     return [];
   }
+
+  return reshapeProducts(
+    removeEdgesAndNodes(res.body.data.collection.products)
+  );
 }
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  try {
-    const res = await shopifyFetch<ShopifyProductOperation>({
-      query: getProductQuery,
-      tags: [TAGS.products],
-      variables: { handle },
-    });
-    return reshapeProduct(res.body.data.product, false);
-  } catch (err) {
-    console.error("Failed to fetch product:", err);
-    return undefined;
-  }
+  // [handle]/page.tsx
+
+  const res = await shopifyFetch<ShopifyProductOperation>({
+    query: getProductQuery,
+    tags: [TAGS.products],
+    variables: {
+      handle,
+    },
+  });
+
+  return reshapeProduct(res.body.data.product, false);
 }
+
+// cart
 
 function reshapeCart(cart: ShopifyCart): Cart {
   if (!cart.cost?.totalTaxAmount) {
-    cart.cost.totalTaxAmount = { amount: "0.0", currencyCode: "EUR" };
+    cart.cost.totalTaxAmount = {
+      amount: "0.0",
+      currencyCode: "EUR",
+    };
   }
+
   return {
     ...cart,
     lines: removeEdgesAndNodes(cart.lines),
@@ -256,26 +312,42 @@ export async function createCart(): Promise<Cart> {
     query: createCartMutation,
     cache: "no-store",
   });
+
   return reshapeCart(res.body.data.cartCreate.cart);
 }
 
-export async function getCart(cartId: string | undefined): Promise<Cart | undefined> {
+export async function getCart(
+  cartId: string | undefined
+): Promise<Cart | undefined> {
   if (!cartId) return undefined;
+
   const res = await shopifyFetch<ShopifyCartOperation>({
     query: getCartQuery,
     variables: { cartId },
     tags: [TAGS.cart],
   });
-  if (!res.body.data.cart) return undefined;
+
+  // old carts becomes 'null' when you checkout
+  if (!res.body.data.cart) {
+    return undefined;
+  }
+
   return reshapeCart(res.body.data.cart);
 }
 
-export async function removeFromCart(cartId: string, lineIds: string[]): Promise<Cart> {
+export async function removeFromCart(
+  cartId: string,
+  lineIds: string[]
+): Promise<Cart> {
   const res = await shopifyFetch<ShopifyRemoveFromCartOperation>({
     query: removeFromCartMutation,
-    variables: { cartId, lineIds },
+    variables: {
+      cartId,
+      lineIds,
+    },
     cache: "no-store",
   });
+
   return reshapeCart(res.body.data.cartLinesRemove.cart);
 }
 
@@ -285,9 +357,13 @@ export async function updateCart(
 ): Promise<Cart> {
   const res = await shopifyFetch<ShopifyUpdateCartOperation>({
     query: editCartItemsMutation,
-    variables: { cartId, lines },
+    variables: {
+      cartId,
+      lines,
+    },
     cache: "no-store",
   });
+
   return reshapeCart(res.body.data.cartLinesUpdate.cart);
 }
 
@@ -297,31 +373,34 @@ export async function addToCart(
 ): Promise<Cart> {
   const res = await shopifyFetch<ShopifyAddToCartOperation>({
     query: addToCartMutation,
-    variables: { cartId, lines },
+    variables: {
+      cartId,
+      lines,
+    },
     cache: "no-cache",
   });
+
   return reshapeCart(res.body.data.cartLinesAdd.cart);
 }
 
-
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const collectionWebhooks = [
-    'collections/create',
-    'collections/delete',
-    'collections/update'
+    "collections/create",
+    "collections/delete",
+    "collections/update",
   ];
   const productWebhooks = [
-    'products/create',
-    'products/delete',
-    'products/update'
+    "products/create",
+    "products/delete",
+    "products/update",
   ];
-  const topic = (await headers()).get('x-shopify-topic') || 'unknown';
-  const secret = req.nextUrl.searchParams.get('secret');
+  const topic = (await headers()).get("x-shopify-topic") || "unknown";
+  const secret = req.nextUrl.searchParams.get("secret");
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-    console.error('Invalid revalidation secret.');
+    console.error("Invalid revalidation secret.");
     return NextResponse.json({ status: 401 });
   }
 
