@@ -401,52 +401,34 @@ export async function addToCart(
 }
 
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
-  const collectionWebhooks = [
-    "collections/create",
-    "collections/delete",
-    "collections/update",
-  ];
-  const productWebhooks = [
-    "products/create",
-    "products/delete",
-    "products/update",
-  ];
-
-  const reqHeaders = await headers();
-  const topic = reqHeaders.get("x-shopify-topic") || "unknown";
-  const secret = req.nextUrl.searchParams.get("secret");
-
-  const isCollectionUpdate = collectionWebhooks.includes(topic);
-  const isProductUpdate = productWebhooks.includes(topic);
-
-  // 🔐 Проверка секрета
-  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-    return NextResponse.json({ status: 401, error: "Unauthorized" });
-  }
-
-  if (!isCollectionUpdate && !isProductUpdate) {
-    return NextResponse.json({ status: 200, message: "Ignored topic" });
-  }
-
-  await new Promise((res) => setTimeout(res, 3000));
-
   try {
-    if (isCollectionUpdate) {
-      console.log("Revalidating collections...");
+    const collectionWebhooks = ["collections/create", "collections/delete", "collections/update"];
+    const productWebhooks = ["products/create", "products/delete", "products/update"];
+
+    const reqHeaders = await headers();
+    const topic = reqHeaders.get("x-shopify-topic") || "unknown";
+    const secret = req.nextUrl.searchParams.get("secret");
+
+    // Проверка секрета
+    if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+      return NextResponse.json({ status: 401, error: "Unauthorized" });
+    }
+
+    if (!collectionWebhooks.includes(topic) && !productWebhooks.includes(topic)) {
+      return NextResponse.json({ status: 200, message: "Ignored topic" });
+    }
+
+    await new Promise((res) => setTimeout(res, 3000));
+
+    if (collectionWebhooks.includes(topic)) {
       await revalidateTag(TAGS.collections);
     }
 
-    if (isProductUpdate) {
-      console.log("Revalidating products...");
+    if (productWebhooks.includes(topic)) {
       await revalidateTag(TAGS.products);
     }
 
-    return NextResponse.json({
-      status: 200,
-      revalidated: true,
-      topic,
-      now: Date.now(),
-    });
+    return NextResponse.json({ status: 200, revalidated: true, topic, now: Date.now() });
   } catch (err) {
     console.error("Revalidation failed:", err);
     return NextResponse.json({ status: 500, error: "Revalidation failed" });
