@@ -178,7 +178,6 @@ export async function getProducts({
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
-    cache: "no-store",
     tags: [TAGS.products],
     variables: {
       query,
@@ -384,6 +383,7 @@ export async function addToCart(
   return reshapeCart(res.body.data.cartLinesAdd.cart);
 }
 
+
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const collectionWebhooks = [
     "collections/create",
@@ -395,28 +395,47 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
     "products/delete",
     "products/update",
   ];
-  const topic = (await headers()).get("x-shopify-topic") || "unknown";
+
+  const reqHeaders = await headers();
+  const topic = reqHeaders.get("x-shopify-topic") || "unknown";
   const secret = req.nextUrl.searchParams.get("secret");
+
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
+  // 🔐 Проверка секрета
   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
-    console.error("Invalid revalidation secret.");
-    return NextResponse.json({ status: 401 });
+    return NextResponse.json({ status: 401, error: "Unauthorized" });
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
-    // We don't need to revalidate anything for any other topics.
-    return NextResponse.json({ status: 200 });
+    console.log(`ℹ️ Webhook received: ${topic} — no revalidation necessary.`);
+    return NextResponse.json({ status: 200, message: "Ignored topic" });
   }
 
-  if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections);
-  }
+  console.log(`🔄 Webhook received: ${topic}. Starting revalidation...`);
 
-  if (isProductUpdate) {
-    revalidateTag(TAGS.products);
-  }
+  await new Promise((res) => setTimeout(res, 3000));
 
-  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+  try {
+    if (isCollectionUpdate) {
+      console.log("📦 Revalidating collections...");
+      await revalidateTag(TAGS.collections);
+    }
+
+    if (isProductUpdate) {
+      console.log("🛍️ Revalidating products...");
+      await revalidateTag(TAGS.products);
+    }
+
+    return NextResponse.json({
+      status: 200,
+      revalidated: true,
+      topic,
+      now: Date.now(),
+    });
+  } catch (err) {
+    console.error("❗ Revalidation failed:", err);
+    return NextResponse.json({ status: 500, error: "Revalidation failed" });
+  }
 }
