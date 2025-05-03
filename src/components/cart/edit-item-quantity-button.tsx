@@ -67,7 +67,7 @@ export const EditItemQuantityButton = ({
       }}
     >
       <SubmitButton type={type} disabled={isPending} />
-      <p aria-label="polite" className="sr-only" role="status">
+      <p aria-label="polite" className="sr-only g" role="status">
         {message}
       </p>
     </form>
