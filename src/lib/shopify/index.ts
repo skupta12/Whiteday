@@ -171,12 +171,12 @@ export async function getProducts({
   query,
   reverse,
   sortKey,
-  fallbackProducts,
+  fallbackProducts = [],
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
-  fallbackProducts: Product[];
+  fallbackProducts?: Product[];
 }): Promise<Product[]> {
   try {
     const res = await shopifyFetch<ShopifyProductsOperation>({
