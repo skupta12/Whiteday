@@ -1,3 +1,5 @@
+"use client";
+
 export default function Error() {
     return (
       <div className=" text-center mx-auto my-4 flex max-w-xl flex-col rounded-lg 
