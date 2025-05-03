@@ -3,21 +3,23 @@
 import { Product } from "@/lib/shopify/types";
 import { Price, Prose, VariantSelector } from ".";
 import styles from "@/styles";
+import { useProduct } from "./product-context";
 import { AddToCart } from "../cart";
 
 export const ProductDescription = ({ product }: { product: Product }) => {
   
-  // const { state } = useProduct();
+  const { state } = useProduct();
 
-  // const variants = product.variants.map((edge) => edge);
+  const variants = product.variants.map((edge) => edge);
 
-  // const selectedVariant = variants.find((variant) =>
-  //   variant.selectedOptions.every((option) => {
-  //     const name = option.name.toLowerCase();
-  //     return state[name] === option.value;
-  //   })
-  // );
+  const selectedVariant = variants.find((variant) =>
+    variant.selectedOptions.every((option) => {
+      const name = option.name.toLowerCase();
+      return state[name] === option.value;
+    })
+  );
 
+  const quantity = selectedVariant?.quantityAvailable ?? 0;
 
   return (
     <>
@@ -36,12 +38,12 @@ export const ProductDescription = ({ product }: { product: Product }) => {
       <div className="mb-6 flex gap-5 items-center">
         <AddToCart product={product}/>
 
-        {/* {quantity > 0 && quantity <= 6 && (
+        {quantity > 0 && quantity <= 6 && (
           <p className="text-sm text-white">
             This item only has{" "}
             <span className="text-red-400">{quantity} left</span> in stock!
           </p>
-        )} */}
+        )}
       </div>
       <div className="border border-white p-4 mb-6">
         <h4 className={styles.headingH4}>Info</h4>
