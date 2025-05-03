@@ -189,17 +189,20 @@ export async function getProducts({
       },
     });
 
-    if (!res.body?.data?.products) {
-      console.warn("Shopify returned empty data");
-      return fallbackProducts;
+    const productsData = res.body?.data?.products;
+
+    if (!productsData || !productsData.edges || productsData.edges.length === 0) {
+      console.warn("Shopify returned empty or no products");
+      return fallbackProducts;  // Возвращаем fallbackProducts, если нет данных
     }
 
-    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+    return reshapeProducts(removeEdgesAndNodes(productsData));
   } catch (err) {
     console.error("Failed to fetch products:", err);
-    return fallbackProducts;
+    return fallbackProducts;  // Возвращаем fallbackProducts в случае ошибки
   }
 }
+
 
 // collections
 
