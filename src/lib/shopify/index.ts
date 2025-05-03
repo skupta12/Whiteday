@@ -171,12 +171,10 @@ export async function getProducts({
   query,
   reverse,
   sortKey,
-  fallbackProducts = [],
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
-  fallbackProducts?: Product[];
 }): Promise<Product[]> {
   try {
     const res = await shopifyFetch<ShopifyProductsOperation>({
@@ -189,19 +187,13 @@ export async function getProducts({
       },
     });
 
-    const productsData = res.body?.data?.products;
-
-    if (!productsData || !productsData.edges || productsData.edges.length === 0) {
-      console.warn("Shopify returned empty or no products");
-      return fallbackProducts;  // Возвращаем fallbackProducts, если нет данных
-    }
-
-    return reshapeProducts(removeEdgesAndNodes(productsData));
+    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
   } catch (err) {
-    console.error("Failed to fetch products:", err);
-    return fallbackProducts;  // Возвращаем fallbackProducts в случае ошибки
+    console.error("Products fetching error:", err);
+    return [];
   }
 }
+
 
 
 // collections
