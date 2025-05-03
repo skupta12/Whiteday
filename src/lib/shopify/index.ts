@@ -171,22 +171,34 @@ export async function getProducts({
   query,
   reverse,
   sortKey,
+  fallbackProducts,
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
+  fallbackProducts: Product[];
 }): Promise<Product[]> {
-  const res = await shopifyFetch<ShopifyProductsOperation>({
-    query: getProductsQuery,
-    tags: [TAGS.products],
-    variables: {
-      query,
-      reverse,
-      sortKey,
-    },
-  });
+  try {
+    const res = await shopifyFetch<ShopifyProductsOperation>({
+      query: getProductsQuery,
+      tags: [TAGS.products],
+      variables: {
+        query,
+        reverse,
+        sortKey,
+      },
+    });
 
-  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+    if (!res.body?.data?.products) {
+      console.warn("Shopify returned empty data");
+      return fallbackProducts;
+    }
+
+    return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+  } catch (err) {
+    console.error("Failed to fetch products:", err);
+    return fallbackProducts;
+  }
 }
 
 // collections
