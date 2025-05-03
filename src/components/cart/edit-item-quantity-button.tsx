@@ -50,9 +50,6 @@ export const EditItemQuantityButton = ({
   const [isPending, startTransition] = useTransition();
 
   const isPlus = type === "plus";
-  const maxReached =
-    isPlus && item.quantity >= item.merchandise.quantityAvailable;
-
   const payload = {
     merchandiseId: item.merchandise.id,
     quantity: isPlus ? item.quantity + 1 : item.quantity - 1,
@@ -63,15 +60,13 @@ export const EditItemQuantityButton = ({
   return (
     <form
       action={() => {
-        if (!maxReached) {
           startTransition(() => {
             optimisticUpdate(payload.merchandiseId, type);
             actionWithVariant();
           });
-        }
       }}
     >
-      <SubmitButton type={type} disabled={maxReached || isPending} />
+      <SubmitButton type={type} disabled={isPending} />
       <p aria-label="polite" className="sr-only" role="status">
         {message}
       </p>
