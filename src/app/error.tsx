@@ -1,6 +1,8 @@
 "use client";
 
-export default function Error({ reset }: { reset: () => void }) {
+import Link from "next/link";
+
+export default function Error() {
   return (
     <div
       className=" text-center mx-auto my-61 flex max-w-xl flex-col rounded-lg 
@@ -12,14 +14,13 @@ export default function Error({ reset }: { reset: () => void }) {
         reload the page.
       </p>
       <div className="h-full border border-black bg-white inline-block p-[3px] mt-4">
-        <button
-          onClick={() => reset()}
+        <Link href="/"
           className="bg-white w-full text-black hover:bg-black p-[8px] hover:text-white 
           border border-black font-inter font-normal py-[10px] px-[30px] 
           text-[18px] uppercase cursor-pointer duration-500"
         >
-          Try Again
-        </button>
+          Back to the home page
+        </Link>
       </div>
     </div>
   );
