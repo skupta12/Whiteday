@@ -8,7 +8,7 @@ async function CollectionList() {
   return <FilterList list={collections} />;
 }
 
-const skeleton = "mb-3 h-8 w-full animate-pulse bg-neutral-700";
+const skeleton = "mb-3 h-13 w-full animate-pulse bg-neutral-700";
 const items = "bg-neutral-400";
 
 export default function Collections() {
