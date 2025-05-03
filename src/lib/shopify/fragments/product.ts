@@ -1,5 +1,5 @@
-import imageFragment from "./image";
-import seoFragment from "./seo";
+import imageFragment from './image';
+import seoFragment from './seo';
 
 const productFragment = /* GraphQL */ `
   fragment product on Product {
@@ -24,13 +24,13 @@ const productFragment = /* GraphQL */ `
         currencyCode
       }
     }
-    variants(first: 50) {
+    variants(first: 250) {
       edges {
         node {
           id
           title
-          quantityAvailable
           availableForSale
+          quantityAvailable
           selectedOptions {
             name
             value
@@ -39,7 +39,6 @@ const productFragment = /* GraphQL */ `
             amount
             currencyCode
           }
-       
         }
       }
     }
