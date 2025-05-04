@@ -5,7 +5,7 @@ import { useProduct } from "../product/product-context";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
 import { addItem } from "./actions";
-import { Button } from "../ui";
+import { AddToCartButton } from "../ui/button";
 
 interface AddToCartProps {
   product: Product;
@@ -38,7 +38,7 @@ export const AddToCart = ({ product }: AddToCartProps) => {
         actionWithVariant(); // await
       }}
     >
-      <Button
+      <AddToCartButton
         type="submit"
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
@@ -47,7 +47,7 @@ export const AddToCart = ({ product }: AddToCartProps) => {
         {message}
       </p>
       Add to cart
-      </Button>
+      </AddToCartButton>
     </form>
   );
 };

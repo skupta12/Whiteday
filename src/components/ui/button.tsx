@@ -7,10 +7,15 @@ import React from "react";
 type ButtonProps = {
   children: React.ReactNode;
   className?: string;
-  href?: string;
+  href: string;
   type: "button" | "submit" | undefined;
   variant?: "default" | "revert";
-  size?: string;
+};
+type AddToCartButtonProps = {
+  children: React.ReactNode;
+  className?: string;
+  type: "button" | "submit" | undefined;
+  variant?: "default" | "revert";
   disabled?: boolean;
   onClick?: () => void;
   availableForSale?: boolean;
@@ -41,62 +46,66 @@ const wrapperClasses =
   "h-full border border-black bg-white inline-block p-[3px]";
 
 const Button: React.FC<ButtonProps> = ({
-  children,
   className,
-  href,
   type,
-  variant,
-  disabled,
-  onClick,
-  availableForSale,
-  selectedVariantId,
+  variant = "default",
+  children,
+  href,
 }) => {
-  const buttonContent = (
-    <div className={wrapperClasses}>
+  return (
+    <Link href={href} className={cn(wrapperClasses)}>
       <button
-        onClick={onClick}
-        disabled={disabled}
         type={type}
         className={cn(buttonVariants({ variant }), className)}
       >
         {children}
       </button>
+    </Link>
+  );
+};
+
+const AddToCartButton: React.FC<AddToCartButtonProps> = ({
+  children,
+  className,
+  type = "button",
+  variant = "default",
+  disabled = false,
+  onClick,
+  availableForSale = true,
+  selectedVariantId,
+}) => {
+  const isOutOfStock = !availableForSale;
+  const isVariantUnselected = !selectedVariantId;
+
+  const renderButton = (
+    content: React.ReactNode,
+    buttonDisabled: boolean,
+    ariaLabel?: string
+  ) => (
+    <div className={cn(wrapperClasses, buttonDisabled && "cursor-not-allowed")}>
+      <button
+        onClick={onClick}
+        disabled={buttonDisabled}
+        type={type}
+        aria-label={ariaLabel}
+        className={cn(buttonVariants({ variant }), className)}
+      >
+        {content}
+      </button>
     </div>
   );
 
-  if (href) {
-    return <Link href={href}>{buttonContent}</Link>;
+  if (isOutOfStock) {
+    return renderButton("Out of Stock", true, "Out of stock");
   }
 
-  if (!availableForSale) {
-    return (
-      <div className={wrapperClasses}>
-        <button
-          aria-label="Out of stock"
-          disabled
-          className={cn(buttonVariants({ variant }), className)}
-        >
-          Out of Stock
-        </button>
-      </div>
-    );
+  if (isVariantUnselected) {
+    return renderButton("Add to Cart", true, "Please select an option");
   }
 
-  if (!selectedVariantId) {
-    return (
-      <div className={wrapperClasses}>
-        <button
-          aria-label="Please select an option"
-          disabled
-          className={cn(buttonVariants({ variant }), className)}
-        >
-          Add to Cart
-        </button>
-      </div>
-    );
-  }
+  const content = children;
 
-  return buttonContent;
+  return renderButton(content, disabled);
 };
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({
@@ -118,4 +127,4 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
   );
 };
 
-export { Button, buttonVariants, ArrowButton };
+export { Button, AddToCartButton, buttonVariants, ArrowButton };

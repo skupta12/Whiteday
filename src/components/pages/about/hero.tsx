@@ -27,7 +27,7 @@ export const Hero: React.FC<HeroProps> = ({ className }) => {
           />
         </div>
         <div className="max-w-[1400px] ml-auto">
-          <p className="text-[36px] text-white mb-5">
+          <p className="md:text-[36px] sm:text-[30px] text-[20px] text-white mb-5">
             At WHITE DAY, we want the right choice to be as easy as putting on a
             great T-shirt. That&apos;s why we partner with the best, ethical
             factories around the world. Source only the finest materials. And

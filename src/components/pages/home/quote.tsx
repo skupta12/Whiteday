@@ -19,7 +19,7 @@ export const Quote: React.FC = () => {
               A collection of bad ideas come to fruition as <br /> real products
               for you to experience.
             </p>
-            <Button variant="default" type="button" href="/search">VIEW ALL PRODUCTS</Button>
+            <Button type="button" href="/search">VIEW ALL PRODUCTS</Button>
           </div>
           <div className="lg:col-span-4 col-span-12">
             <div className="w-full h-[433px] relative overflow-hidden">

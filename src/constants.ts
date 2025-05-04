@@ -195,3 +195,27 @@ export const socialMedia = [
     href: "https://www.youtube.com",
   },
 ]
+
+export const careList = [
+  {
+    id: 1,
+    text: "Premium fabrics - Clothing made from high-quality, comfortable."
+  },
+  {
+    id: 2,
+    text: "Fast shipping - Orders are dispatched within 24 hours."
+  },
+  {
+    id: 3,
+    text: "Easy returns - Hassle-free returns or exchanges if something."
+  },
+  {
+    id: 4,
+    text: "Timeless design - Versatile styles that fit effortlessly into any wardrobe."
+  },
+  {
+    id: 5,
+    text: "Designed to last - Thoughtfully crafted garments that combine durability with comfort."
+  }
+]
+
