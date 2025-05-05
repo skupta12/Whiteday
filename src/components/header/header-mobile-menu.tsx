@@ -11,7 +11,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import styles from "@/styles";
 import { navLinks } from "@/constants";
-import { usePathname } from "next/navigation"; // Импорт usePathname
+import { usePathname } from "next/navigation";
 
 export const HeaderMobileMenu: React.FC = () => {
   
