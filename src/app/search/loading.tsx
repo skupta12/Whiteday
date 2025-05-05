@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <>
       <div className="grid grid-cols-12 gap-5">
-        {Array(12)
+        {Array(6)
           .fill(0)
           .map((_, index) => {
             return (

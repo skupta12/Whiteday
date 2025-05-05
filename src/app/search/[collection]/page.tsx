@@ -21,7 +21,7 @@ export default async function CategoryPage(props: {
   return (
     <section>
       {products.length === 0 ? (
-        <p className="ml-17 py-3 text-4xl text-white flex">{`No products found in this collection`}</p>
+        <p className="sm:ml-17 py-3 text-4xl text-white flex">{`No products found in this collection`}</p>
       ) : (
         <ProductCard products={products} />
       )}
