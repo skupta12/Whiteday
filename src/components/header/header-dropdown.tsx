@@ -1,5 +1,8 @@
-import { DropdownMenu } from "../ui";
+"use client";
+
+import { useState } from "react";
 import {
+  DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
@@ -18,19 +21,24 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
   currentPath,
   items,
 }) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
-        className="text-white flex items-center
-    font-medium xl:text-[36px] text-[24px] uppercase outline-none cursor-pointer"
+        className="text-white flex items-center font-medium xl:text-[36px] 
+        text-[24px] uppercase outline-none cursor-pointer"
       >
         Pages
         <ChevronDown size={32} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {items.map((item) => (
-          <DropdownMenuItem key={item.title}>
+          <DropdownMenuItem
+            key={item.title}
+          >
             <Link
+              onClick={() => setOpen(false)}
               className={cn(
                 "text-[30px] font-medium",
                 currentPath === item.path ? "text-neutral-400" : "text-black"

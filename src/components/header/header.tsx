@@ -9,10 +9,6 @@ import { cn } from "@/lib/utils";
 import { Container } from "../container";
 import { HeaderDropdown, HeaderMobileMenu } from ".";
 
-interface HeaderProps {
-  className?: string;
-}
-
 const NavItem: React.FC<{
   href: string;
   currentPath: string;
@@ -23,12 +19,12 @@ const NavItem: React.FC<{
   </li>
 );
 
-export const Header: React.FC<HeaderProps> = ({ className }) => {
+export const Header: React.FC = () => {
   
   const currentPath = usePathname();
 
   return (
-    <header className={cn("bg-black", className)}>
+    <header className="bg-black">
       <Container>
         <div className="flex items-center justify-between sm:py-6 py-4">
           <Link href="/">
