@@ -52,6 +52,7 @@ type ExtractVariables<T> = T extends { variables: object }
   : never;
 
 export async function shopifyFetch<T>({
+  cache = "force-cache",
   headers,
   query,
   tags,
@@ -75,6 +76,8 @@ export async function shopifyFetch<T>({
         ...(query && { query }),
         ...(variables && { variables }),
       }),
+      cache,
+      ...(tags && { next: { tags } }),
     });
     const body = await result.json();
     if (body.errors) {
