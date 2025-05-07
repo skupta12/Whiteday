@@ -1,5 +1,5 @@
 const styles = {
-    sectionPadding: "lg:py-17 py-10",
+    sectionPadding: "lg:py-18 py-10",
     sectionPadding2: "lg:py-28 py-10",
 
     nav: "text-white hover:text-neutral-500 font-medium xl:text-[36px] text-[24px] uppercase transition-colors duration-300",

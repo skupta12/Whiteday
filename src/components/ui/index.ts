@@ -5,3 +5,5 @@ export { InfinitiveScroller } from "./infinitive-scroller";
 export { Carousel } from "./carousel";
 export { Skeleton } from "./skeleton";
 export { Input } from "./input";
+export { Form } from "./form";
+export { Label } from "./label";

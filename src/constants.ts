@@ -13,7 +13,7 @@ export const navLinks = [
       { id: 7, title: "Privacy Policy", path: "/privacy-policy" },
     ],
   },
-  { id: 4, title: "About", path: "/about-us" },
+  { id: 4, title: "About us", path: "/about-us" },
 ];
 
 export const heroReviews = [
