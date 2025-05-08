@@ -60,7 +60,7 @@ export const CartModal: React.FC = () => {
 
         <SheetContent aria-describedby="The cart modal window" side="right">
           <SheetHeader className="border-b border-black">
-            <SheetTitle className="sm:text-[32px] text-[28px] uppercase">
+            <SheetTitle aria-label="Cart" className="sm:text-[32px] text-[28px] uppercase">
               Your cart
             </SheetTitle>
           </SheetHeader>

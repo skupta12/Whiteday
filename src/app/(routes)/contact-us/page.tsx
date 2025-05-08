@@ -24,7 +24,7 @@ export default function ContactUs() {
           </div>
 
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 
-          lg:py-17 py-10">
+          lg:py-17 pt-10">
             <h2 className={styles.headingH2}>get in touch</h2>
 
             <InputForm />
