@@ -1,9 +1,10 @@
+"use client";
+
 import { schema } from "@/lib/validators";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input";
-import { LoaderCircle } from "lucide-react";
 
 export type FormFields = {
   name: string;
@@ -13,7 +14,6 @@ export type FormFields = {
 };
 
 export const InputForm: React.FC = () => {
-    
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const {
@@ -28,7 +28,7 @@ export const InputForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-    
+
       console.log(data);
 
       setFormSubmitted(true);
@@ -42,7 +42,7 @@ export const InputForm: React.FC = () => {
 
   if (formSubmitted) {
     return (
-      <div className="flex flex-col justify-center items-center text-white bg-green-500">
+      <div className="h-11 flex flex-col justify-center items-center text-white bg-green-400">
         Message sent successfully!
       </div>
     );
@@ -54,29 +54,33 @@ export const InputForm: React.FC = () => {
       className="grid grid-cols-12 sm:gap-8 gap-6 sm:mb-0 mb-10 text-white"
     >
       <div className="sm:col-span-6 col-span-12">
-        <Input
-          className="border-b focus:border-white border-white/60"
-          {...register("name")}
-          placeholder="Name"
-        />
-        {errors.name && (
-          <div className="text-red-500 text-[14px] mt-1">
-            {errors.name.message}
-          </div>
-        )}
+        <div className="relative">
+          <Input
+            className="border-b focus:border-white border-white/60"
+            {...register("name")}
+            placeholder="Name"
+          />
+          {errors.name && (
+            <div className="text-red-400 text-[14px] mt-1 absolute -bottom-7 left-0">
+              {errors.name.message}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="sm:col-span-6 col-span-12">
-        <Input
-          className="border-b focus:border-white border-white/60"
-          {...register("email")}
-          placeholder="Email"
-        />
-        {errors.email && (
-          <div className="text-red-500 text-[14px] mt-1">
-            {errors.email.message}
-          </div>
-        )}
+        <div className="relative">
+          <Input
+            className="border-b focus:border-white border-white/60"
+            {...register("email")}
+            placeholder="Email"
+          />
+          {errors.email && (
+            <div className="text-red-400 text-[14px] mt-1 absolute -bottom-7 left-0">
+              {errors.email.message}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="sm:col-span-6 col-span-12">
@@ -97,7 +101,7 @@ export const InputForm: React.FC = () => {
         />
       </div>
 
-      <div className="col-span-12">
+      <div className="col-span-12 text-right w-full">
         <div className="h-full border border-black bg-white inline-block p-[3px]">
           <button
             disabled={isSubmitting}
@@ -107,11 +111,7 @@ export const InputForm: React.FC = () => {
                 font-normal py-[10px] px-[30px] text-[18px] uppercase cursor-pointer duration-500 
                 disabled:pointer-events-none disabled:opacity-50`}
           >
-            {isSubmitting ? (
-              <LoaderCircle className="animate-spin text-center mx-auto text-black" />
-            ) : (
-              "Send a message"
-            )}
+            {isSubmitting ? "Please wait..." : "Send a message"}
           </button>
         </div>
       </div>

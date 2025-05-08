@@ -1,11 +1,13 @@
 "use client";
 
 import { Container } from "@/components";
+import GoogleMap from "@/components/google-map";
 import { InputForm } from "@/components/ui/input-form";
 import styles from "@/styles";
 
 export default function ContactUs() {
   return (
+    <>
     <section>
       <Container>
         <div className="lg:py-17 py-10 border-b border-white text-center">
@@ -20,12 +22,17 @@ export default function ContactUs() {
           </p>
         </div>
 
-        <div className="lg:py-17 py-10 border-b border-white grid grid-cols-2">
+        <div className="lg:py-17 py-10 border-b border-white grid lg:grid-cols-2 grid-cols-1 gap-y-6">
+
           <h2 className={styles.headingH2}>get in touch</h2>
 
           <InputForm />
         </div>
       </Container>
     </section>
+
+    <GoogleMap />
+    
+    </>
   );
 }
