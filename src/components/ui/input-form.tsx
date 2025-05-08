@@ -108,7 +108,7 @@ export const InputForm: React.FC = () => {
             type="submit"
             className={`bg-white text-black hover:bg-black hover:text-white border 
                 border-black font-inter inline-flex items-center justify-center gap-0 whitespace-nowrap 
-                font-normal py-[10px] px-[30px] text-[18px] uppercase cursor-pointer duration-500 
+                font-normal py-2 px-6 text-[18px] uppercase cursor-pointer duration-500 
                 disabled:pointer-events-none disabled:opacity-50`}
           >
             {isSubmitting ? "Please wait..." : "Send a message"}
