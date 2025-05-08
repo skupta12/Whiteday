@@ -219,3 +219,30 @@ export const careList = [
   }
 ]
 
+export const contactForm = [
+  {
+    id: 1,
+    placeholder: "Name",
+    type: "text",
+    name: "name"
+  },
+  {
+    id: 2,
+    placeholder: "Email",
+    type: "email",
+    name: "email"
+  },
+  {
+    id: 3,
+    placeholder: "Phone",
+    type: "tel",
+    name: "phone"
+  },
+  {
+    id: 4,
+    placeholder: "Message",
+    type: "text",
+    name: "message"
+  },
+]
+

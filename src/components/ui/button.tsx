@@ -10,6 +10,7 @@ type ButtonProps = {
   href: string;
   type: "button" | "submit" | undefined;
   variant?: "default" | "revert";
+  disabled?: boolean;
 };
 type AddToCartButtonProps = {
   children: React.ReactNode;
