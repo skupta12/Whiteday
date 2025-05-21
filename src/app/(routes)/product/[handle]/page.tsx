@@ -88,7 +88,7 @@ export default async function ProductPage(props: {
             <div className="md:col-span-6 col-span-12">
               <div className="md:block hidden">
                 <DesktopGallery
-                  images={product.images.slice(0, 3).map((image: Image) => ({
+                  images={product.images.map((image: Image) => ({
                     src: image.url,
                     altText: image.altText,
                   }))}
@@ -96,7 +96,7 @@ export default async function ProductPage(props: {
               </div>
               <div className="md:hidden block">
                 <MobileGallery
-                  images={product.images.slice(0, 3).map((image: Image) => ({
+                  images={product.images.map((image: Image) => ({
                     src: image.url,
                     altText: image.altText,
                   }))}
