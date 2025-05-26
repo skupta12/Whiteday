@@ -2,6 +2,12 @@ import { ProductCard } from "@/components/product";
 import { defaultSort, sorting } from "@/lib/constants";
 import { getProducts } from "@/lib/shopify";
 import React from "react";
+import Loading from "./loading";
+
+export const metadata = {
+  title: "Search",
+  description: "Search for products in the store.",
+};
 
 export default async function SearchPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -23,9 +29,11 @@ export default async function SearchPage(props: {
           <span className="font-bold">&quot;{searchValue}&quot;</span> {" "}
         </p>
       ) : null} */}
-      {products.length > 0 ? (
-        <ProductCard products={products}/>
-      ) : null}
+      {products.length === 0 ? (
+        <Loading />
+      ) : (
+        <ProductCard products={products} />
+      )}
     </>
   );
 }
