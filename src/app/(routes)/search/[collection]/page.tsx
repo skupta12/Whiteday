@@ -1,6 +1,7 @@
 import { ProductCard } from "@/components/product";
 import { defaultSort, sorting } from "@/lib/constants";
 import { getCollectionProducts } from "@/lib/shopify";
+import Loading from "../loading";
 
 export default async function CategoryPage(props: {
   params: Promise<{ collection: string }>;
@@ -21,7 +22,7 @@ export default async function CategoryPage(props: {
   return (
     <section>
       {products.length === 0 ? (
-        <p className="sm:ml-17 py-3 text-4xl text-white flex">{`No products found in this collection`}</p>
+        <Loading/>
       ) : (
         <ProductCard products={products} />
       )}
