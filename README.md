@@ -10,7 +10,10 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **React** and
 
 - **Shopify Integration**:  
   Seamlessly fetch product categories and product data directly from Shopify using their API. This makes it easy to set up and manage your ecommerce store while connecting to the most popular platform for online retail.
-
+  
+- **Server-Side Rendering (SSR)**:  
+  Built with Next.js, the project supports SSR, which helps with faster page loads, better SEO, and a better user experience. All product data is fetched server-side for fast and efficient rendering.
+  
 - **Incremental Static Regeneration (ISR)**:  
   Next.js's ISR feature allows you to create static pages at runtime, updating content in the background without needing to rebuild the entire site.
 
@@ -19,9 +22,6 @@ Welcome to **WhiteDay** — a modern ecommerce template built with **React** and
 
 - **Responsive Design**:  
   The template is fully responsive, optimized for all screen sizes from mobile to desktop, ensuring a great shopping experience on any device.
-
-- **Server-Side Rendering (SSR)**:  
-  Built with Next.js, the project supports SSR, which helps with faster page loads, better SEO, and a better user experience. All product data is fetched server-side for fast and efficient rendering.
   
 - **Fast Performance**:  
   Optimized for speed, ensuring your site loads quickly and provides a smooth shopping experience.
