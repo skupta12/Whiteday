@@ -1,4 +1,21 @@
-![React](https://img.shields.io/badge/react-v19.0.0-blue) ![Next.js](https://img.shields.io/badge/next-v15.3-yellowgreen) ![Shopify](https://img.shields.io/badge/shopify-v2.0-green)
+<p align="left">
+  <a href="https://reactjs.org/" target="_blank">
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
+  </a>
+  <a href="https://nextjs.org/" target="_blank">
+    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"/>
+  </a>
+  <a href="https://www.typescriptlang.org/" target="_blank">
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+  </a>
+  <a href="https://tailwindcss.com/" target="_blank">
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
+  </a>
+  <a href="https://www.shopify.com/" target="_blank">
+    <img src="https://img.shields.io/badge/Shopify-7AB55C?style=for-the-badge&logo=shopify&logoColor=white" alt="Shopify"/>
+  </a>
+</p>
+
 
 # 🛍️ WhiteDay Ecommerce Template
 
